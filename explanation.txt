@@ -1,0 +1,4 @@
+packages: 
+    db - database
+    pkg - handlers, functions and etc
+    web - css, html, js (if will be)
