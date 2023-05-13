@@ -5,11 +5,10 @@ import (
 	"log"
 
 	//"forum/internal/handler"
+	"forum/internal/handler"
 	"forum/internal/repository"
-	"forum/service"
-
-	//"forum/internal/server"
-	//"forum/internal/service"
+	"forum/internal/server"
+	"forum/internal/service"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -29,14 +28,14 @@ func Run() {
 	// service works with repository data (have validation, check and conidered as mid level layout)
 	service := service.NewService(repository)
 
-	fmt.Println(service)
+	// initiation of the handlers (using the service data and functions)
+	handler := handler.NewHandler(service)
 
-	// handler := handler.NewHandler(service)
-	// server := new(server.Server)
+	server := new(server.Server)
 
-	// fmt.Printf("Starting server at port %s\nhttp://localhost:%s/\n", port, port)
+	fmt.Printf("Starting server at port %s\nhttp://localhost:%s/\n", port, port)
 
-	// if err := server.Run(port, handler.InitRoutes()); err != nil {
-	// 	log.Fatalf("error while running the server: %s", err.Error())
-	// }
+	if err := server.Run(port, handler.InitRoutes()); err != nil {
+		log.Fatalf("error while running the server: %s", err.Error())
+	}
 }
