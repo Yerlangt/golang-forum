@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="templates/static/style.css" />
+    <title>Document</title>
+</head>
+<body>
+    <h1>HELLO WORLD</h1>
+    {{if .User.UserName}}
+    <a href="/logout">  {{.User.UserName}}</a>
+   
+   
+    {{else}}
+    <a href="/sign-up">Sign-up</a>
+    <a href="/sign-in">Sign-in</a>
+    {{end}}
+
+    <a href="/posts/create">Create Post</a>
+
+    {{ if .Posts }}
+    {{range .Posts}}
+    <div>
+        <p>{{.Title}}</p>
+        <p>{{.Content}}</p>
+    </div>
+    <br>
+    {{end}}
+    {{end}}
+</body>
+</html>

@@ -22,9 +22,9 @@ func (h *Handler) InitRoutes() http.Handler {
 	mux.HandleFunc("/", h.homePage)
 	mux.HandleFunc("/sign-up", h.signUp)
 	mux.HandleFunc("/sign-in", h.signIn)
-	mux.HandleFunc("/logout", h.checkAuth(h.logOut))
+	mux.HandleFunc("/logout", h.isAuth(h.logOut))
 
-	mux.HandleFunc("/posts/create", h.checkAuth(h.createPost))
+	mux.HandleFunc("/posts/create", h.isAuth(h.createPost))
 	mux.HandleFunc("/posts", h.postPage)
 
 	mux.Handle("/templates/", http.StripPrefix("/templates", http.FileServer(http.Dir("templates/"))))

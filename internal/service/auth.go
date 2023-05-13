@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"errors"
-	"log"
+	"fmt"
 	"time"
 
 	"forum/internal/models"
@@ -15,7 +15,7 @@ import (
 )
 
 // interface that will work with AuthService structure
-type ServiceAuth interface {
+type Auth interface {
 	CreateUser(user models.User) error
 	SetSession(username, password string) (models.Session, error)
 	UserByToken(token string) (models.User, error)
@@ -33,14 +33,14 @@ var (
 	ErrUserTaken     = errors.New("User with this data is taken")
 )
 
-// duration of the session will be one hour (from the log in moment)
-const sessionTime = time.Hour
-
 func NewAuthService(repository repository.Auth) *AuthService {
 	return &AuthService{
 		repository: repository,
 	}
 }
+
+// duration of the session will be one hour (from the log in moment)
+const sessionTime = time.Hour
 
 // creating user (with data validation), works with repository data
 func (s *AuthService) CreateUser(user models.User) error {
@@ -63,27 +63,31 @@ func (s *AuthService) CreateUser(user models.User) error {
 	// validate email
 	res, strErr := validateEmail(user.Email)
 	if !res {
+		// fmt.Println(strErr)
 		return errors.New(strErr)
 	}
 	// validate password
 	res, strErr = validatePassword(user.Password)
 	if !res {
+		// fmt.Println(strErr)
 		return errors.New(strErr)
 	}
 
 	// validate username
 	res, strErr = validateUsername(user.UserName)
 	if !res {
+		// fmt.Println(strErr)
 		return errors.New(strErr)
 	}
 
 	// hashing password
-	password, err := s.generateHashedPswd(user.Password)
+	password, err := s.generateHashedPassword(user.Password)
 	if err != nil {
 		return err
 	}
+
 	user.Password = password
-	log.Println("User added to db: ", user)
+	fmt.Println(user)
 	return s.repository.CreateUser(user)
 }
 
@@ -122,17 +126,7 @@ func (s *AuthService) UserByToken(token string) (models.User, error) {
 	return user, nil
 }
 
-// generate random token for the user
-func (s *AuthService) generateToken() (string, error) {
-	const tokenLength = 32
-	b := make([]byte, tokenLength)
-	if _, err := rand.Read(b); err != nil {
-		return "", err
-	}
-	return hex.EncodeToString(b), nil
-}
-
-// checking password with hashed on ein the db
+// checking password with hashed on those in the db
 func (s *AuthService) checkPassword(username, password string) (models.User, error) {
 	user, err := s.repository.GetUser(username, "")
 	if err != nil {
@@ -146,8 +140,18 @@ func (s *AuthService) checkPassword(username, password string) (models.User, err
 	return user, nil
 }
 
+// generate random token for the user
+func (s *AuthService) generateToken() (string, error) {
+	const tokenLength = 32
+	b := make([]byte, tokenLength)
+	if _, err := rand.Read(b); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(b), nil
+}
+
 // using library bcrypt to hash password
-func (s *AuthService) generateHashedPswd(password string) (string, error) {
+func (s *AuthService) generateHashedPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	return string(hash), err
 }

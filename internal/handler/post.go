@@ -36,7 +36,7 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 			AuthorID: user.ID,
 		}
 
-		if err := h.services.ServicePost.CreatePost(post); err != nil {
+		if err := h.services.Post.CreatePost(post); err != nil {
 			// error out of Validation
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return

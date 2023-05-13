@@ -8,7 +8,7 @@ import (
 	"forum/internal/repository"
 )
 
-type ServicePost interface {
+type Post interface {
 	CreatePost(post models.Post) error
 	GetAllPosts() ([]models.Post, error)
 }

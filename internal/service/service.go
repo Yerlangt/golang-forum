@@ -3,13 +3,13 @@ package service
 import "forum/internal/repository"
 
 type Service struct {
-	ServiceAuth
-	ServicePost
+	Auth
+	Post
 }
 
 func NewService(repository *repository.Repository) *Service {
 	return &Service{
-		ServiceAuth: NewAuthService(repository.Auth),
-		ServicePost: NewPostService(repository.Post),
+		Auth: NewAuthService(repository.Auth),
+		Post: NewPostService(repository.Post),
 	}
 }

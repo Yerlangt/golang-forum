@@ -30,9 +30,7 @@ func NewAuthStorage(db *sql.DB) *AuthStorage {
 // Adding information regarding new user to the db Users
 func (s *AuthStorage) CreateUser(user models.User) error {
 	query := `
-		INSERT INTO USERS 
-		(Username, Email, Password) 
-		VALUES ($1, $2, $3);
+		INSERT INTO USERS (Username, Email, Password) VALUES ($1, $2, $3);
 	`
 	if _, err := s.db.Exec(query, user.UserName, user.Email, user.Password); err != nil {
 		return err
@@ -44,9 +42,7 @@ func (s *AuthStorage) CreateUser(user models.User) error {
 // Returning user information (struct form) from the db Users according to username and email
 func (s *AuthStorage) GetUser(username, email string) (models.User, error) {
 	query := `
-		SELECT ID, Username, Email, Password 
-		FROM USERS 
-		WHERE Username=$1 or Email = $2;
+		SELECT ID, Username, Email, Password FROM USERS WHERE Username=$1 or Email = $2;
 	`
 
 	var user models.User
@@ -61,9 +57,7 @@ func (s *AuthStorage) GetUser(username, email string) (models.User, error) {
 // Create session for user (adding token and expire date to db table Sessions)
 func (s *AuthStorage) CreateSession(session models.Session) error {
 	query := `
-		INSERT INTO SESSIONS 
-		(UserID, Token, ExpireDate) 
-		VALUES ($1, $2, $3);
+		INSERT INTO SESSIONS (UserID, Token, ExpireDate) VALUES ($1, $2, $3);
 	`
 
 	if _, err := s.db.Exec(query, session.UserID, session.Token, session.ExpirationDate); err != nil {
@@ -76,8 +70,7 @@ func (s *AuthStorage) CreateSession(session models.Session) error {
 // Delete session from db table Sessions according to user token
 func (s *AuthStorage) DeleteSession(token string) error {
 	query := `
-		DELETE FROM SESSIONS 
-		WHERE Token=?;
+		DELETE FROM SESSIONS WHERE Token=?;
 	`
 
 	if _, err := s.db.Exec(query, token); err != nil {
@@ -89,8 +82,7 @@ func (s *AuthStorage) DeleteSession(token string) error {
 // Delete session from db table Sessions according to user id
 func (s *AuthStorage) DeleteSessionById(userID int) error {
 	query := `
-		DELETE FROM SESSIONS 
-		WHERE UserID=?;
+		DELETE FROM SESSIONS WHERE UserID=?;
 	`
 
 	if _, err := s.db.Exec(query, userID); err != nil {
@@ -102,9 +94,7 @@ func (s *AuthStorage) DeleteSessionById(userID int) error {
 // returning information regarding user's session from db table Sessions according to token
 func (s *AuthStorage) GetSessionByToken(token string) (models.Session, error) {
 	query := `
-		SELECT ID, UserID, Token, ExpireDate 
-		FROM SESSIONS 
-		WHERE Token=$1;
+		SELECT ID, UserID, Token, ExpireDate FROM SESSIONS WHERE Token=$1;
 	`
 
 	var session models.Session
@@ -119,9 +109,7 @@ func (s *AuthStorage) GetSessionByToken(token string) (models.Session, error) {
 // returning information regarding user's session from db table Sessions according to id
 func (s *AuthStorage) GetUserById(id int) (models.User, error) {
 	query := `
-		SELECT ID, Username, Email, Password 
-		FROM USERS 
-		WHERE ID=$1;
+		SELECT ID, Username, Email, Password FROM USERS WHERE ID=$1;
 	`
 
 	var user models.User

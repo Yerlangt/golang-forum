@@ -41,7 +41,7 @@ func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 			Password: password[0],
 		}
 
-		if err := h.services.ServiceAuth.CreateUser(user); err != nil {
+		if err := h.services.Auth.CreateUser(user); err != nil {
 			// error out of Validation
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
@@ -73,7 +73,7 @@ func (h *Handler) signIn(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		session, err := h.services.ServiceAuth.SetSession(username[0], password[0])
+		session, err := h.services.Auth.SetSession(username[0], password[0])
 		if err != nil {
 			if errors.Is(err, service.ErrNoUser) || errors.Is(err, service.ErrWrongPassword) {
 				h.ErrorPage(w, http.StatusUnauthorized, err)

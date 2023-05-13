@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 
-	//"forum/internal/handler"
 	"forum/internal/handler"
 	"forum/internal/repository"
 	"forum/internal/server"
@@ -20,7 +19,6 @@ func Run() {
 	if err != nil {
 		log.Fatalf("ERROR ON: opening db: %s", err)
 	}
-	defer db.Close()
 
 	// repository is the most low level layout of the forum, it work with the db (finding, adding or deletion of information)
 	repository := repository.NewRepository(db)
@@ -30,7 +28,6 @@ func Run() {
 
 	// initiation of the handlers (using the service data and functions)
 	handler := handler.NewHandler(service)
-
 	server := new(server.Server)
 
 	fmt.Printf("Starting server at port %s\nhttp://localhost:%s/\n", port, port)

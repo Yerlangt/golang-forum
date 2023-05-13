@@ -20,7 +20,7 @@ func (h *Handler) middleware(next http.Handler) http.Handler {
 		if err == http.ErrNoCookie {
 			user = models.User{}
 		} else if err == nil {
-			user, err = h.services.ServiceAuth.UserByToken(cookie.Value)
+			user, err = h.services.Auth.UserByToken(cookie.Value)
 			if err != nil {
 				fmt.Printf("user by token: %s\n", err)
 			}
@@ -33,7 +33,7 @@ func (h *Handler) middleware(next http.Handler) http.Handler {
 	})
 }
 
-func (h *Handler) checkAuth(next http.HandlerFunc) http.HandlerFunc {
+func (h *Handler) isAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user := r.Context().Value(ctxKey).(models.User)
 		if user == (models.User{}) {
