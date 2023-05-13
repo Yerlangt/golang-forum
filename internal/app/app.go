@@ -23,10 +23,10 @@ func Run() {
 	}
 	defer db.Close()
 
-	// repository is the most low level of the forum, it work with the db (finding, adding or deletion of information)
+	// repository is the most low level layout of the forum, it work with the db (finding, adding or deletion of information)
 	repository := repository.NewRepository(db)
 
-	//
+	// service works with repository data (have validation, check and conidered as mid level layout)
 	service := service.NewService(repository)
 
 	fmt.Println(service)
