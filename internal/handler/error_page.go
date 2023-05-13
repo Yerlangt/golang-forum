@@ -1,11 +1,11 @@
 package handler
 
 import (
+	"html/template"
 	"net/http"
-	"text/template"
 )
 
-var errPage, errParse = template.ParseFiles("templates/error.html")
+var errPage, errParse = template.ParseFiles("web/template/error.html")
 
 func (h *Handler) ErrorPage(w http.ResponseWriter, status int, err error) {
 	w.WriteHeader(status)

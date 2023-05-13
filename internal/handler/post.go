@@ -1,13 +1,13 @@
 package handler
 
 import (
+	"html/template"
 	"net/http"
-	"text/template"
 
 	"forum/internal/models"
 )
 
-var postTemp, postParse = template.ParseFiles("templates/create_post.html")
+var postTemp, postParse = template.ParseFiles("web/template/create_post.html")
 
 func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {

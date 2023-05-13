@@ -1,13 +1,13 @@
 package handler
 
 import (
+	"html/template"
 	"net/http"
-	"text/template"
 
 	"forum/internal/models"
 )
 
-var index, indParse = template.ParseFiles("templates/index.html")
+var index, indParse = template.ParseFiles("web/template/index.html")
 
 // home page with path "/"
 func (h *Handler) homePage(w http.ResponseWriter, r *http.Request) {

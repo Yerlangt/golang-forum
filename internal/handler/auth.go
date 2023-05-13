@@ -2,8 +2,8 @@ package handler
 
 import (
 	"errors"
+	"html/template"
 	"net/http"
-	"text/template"
 	"time"
 
 	"forum/internal/models"
@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	signup, signupParse = template.ParseFiles("templates/signup.html")
-	signin, signinParse = template.ParseFiles("templates/signin.html")
+	signup, signupParse = template.ParseFiles("web/template/signup.html")
+	signin, signinParse = template.ParseFiles("web/template/signin.html")
 )
 
 func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
