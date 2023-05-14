@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -70,14 +71,44 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			h.ErrorPage(w, http.StatusNotFound, err)
 			return
 		}
-		data := models.TemplateData{
-			User: user,
-			Post: post,
+		comments, err := h.services.GetCommentsByPostID(postID)
+		if err != nil {
+			log.Printf("error getting comments by post ID: %s", err)
 		}
-		fmt.Println(data)
+		data := models.TemplateData{
+			User:     user,
+			Post:     post,
+			Comments: comments,
+		}
+		fmt.Println(comments)
 		if err := postTemp.Execute(w, data); err != nil || postParse != nil {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
 		}
+	} else if r.Method == http.MethodPost {
+		if err := r.ParseForm(); err != nil {
+			h.ErrorPage(w, http.StatusInternalServerError, err)
+			return
+		}
+
+		content, ok := r.Form["content"]
+		if !ok {
+			h.ErrorPage(w, http.StatusBadRequest, nil)
+			return
+		}
+		comment := models.Comment{
+			AuthorID:   user.ID,
+			PostID:     postID,
+			Content:    content[0],
+			AuthorName: user.UserName,
+		}
+		if err := h.services.Commentary.CreateComment(comment); err != nil {
+			h.ErrorPage(w, http.StatusInternalServerError, err)
+			return
+		}
+		http.Redirect(w, r, r.URL.Path, http.StatusSeeOther)
+
+	} else {
+		h.ErrorPage(w, http.StatusMethodNotAllowed, nil)
 	}
 }
