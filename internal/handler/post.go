@@ -30,8 +30,10 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 
 		title, err1 := r.Form["title"]
 		content, err2 := r.Form["content"]
+		category, err3 := r.Form["category1"]
+		fmt.Println(title, content, category)
 
-		if !err1 || !err2 {
+		if !err1 || !err2 || !err3 {
 			h.ErrorPage(w, http.StatusBadRequest, nil)
 			return
 		}
