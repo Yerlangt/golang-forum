@@ -80,7 +80,7 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			Post:     post,
 			Comments: comments,
 		}
-
+		fmt.Println(comments)
 		if err := postTemp.Execute(w, data); err != nil || postParse != nil {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
@@ -97,9 +97,10 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		comment := models.Comment{
-			AuthorID: user.ID,
-			PostID:   postID,
-			Content:  content[0],
+			AuthorID:   user.ID,
+			PostID:     postID,
+			Content:    content[0],
+			AuthorName: user.UserName,
 		}
 		if err := h.services.Commentary.CreateComment(comment); err != nil {
 			h.ErrorPage(w, http.StatusInternalServerError, err)

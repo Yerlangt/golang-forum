@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 
 	"forum/internal/models"
 )
@@ -24,18 +25,20 @@ func NewCommentStorage(db *sql.DB) *CommentStorage {
 
 func (s *CommentStorage) CreateComment(comment models.Comment) error {
 	query := `
-        INSERT INTO COMMENTS(AuthorID, PostID, Content) VALUES ($1, $2, $3)
+        INSERT INTO COMMENTS(AuthorID, PostID, Content, AuthorName) VALUES ($1, $2, $3, $4)
     `
 
-	if _, err := s.db.Exec(query, comment.AuthorID, comment.PostID, comment.Content); err != nil {
+	if _, err := s.db.Exec(query, comment.AuthorID, comment.PostID, comment.Content, comment.AuthorName); err != nil {
+		fmt.Println(err)
 		return err
 	}
+	fmt.Println(comment)
 	return nil
 }
 
 func (s *CommentStorage) GetCommentsByPostID(postID int) ([]models.Comment, error) {
 	query := `
-		SELECT ID, AuthorID, PostID, Content FROM COMMENTS  WHERE PostID=?
+		SELECT ID, AuthorID, PostID, Content, AuthorName FROM COMMENTS  WHERE PostID=?
 	`
 
 	rows, err := s.db.Query(query, postID)
@@ -48,7 +51,7 @@ func (s *CommentStorage) GetCommentsByPostID(postID int) ([]models.Comment, erro
 	var comments []models.Comment
 	for rows.Next() {
 		var comment models.Comment
-		if err := rows.Scan(&comment.ID, &comment.AuthorID, &comment.PostID, &comment.Content); err != nil {
+		if err := rows.Scan(&comment.ID, &comment.AuthorID, &comment.PostID, &comment.Content, &comment.AuthorName); err != nil {
 			return comments, err
 		}
 		comments = append(comments, comment)
