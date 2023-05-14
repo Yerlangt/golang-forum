@@ -37,7 +37,7 @@ func (h *Handler) isAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user := r.Context().Value(ctxKey).(models.User)
 		if user == (models.User{}) {
-			http.Redirect(w, r, "/sign-in", http.StatusSeeOther)
+			http.Redirect(w, r, "/sign-up", http.StatusSeeOther)
 			return
 		}
 

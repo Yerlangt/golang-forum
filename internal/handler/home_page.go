@@ -11,7 +11,7 @@ var index, indParse = template.ParseFiles("web/template/index.html")
 
 // home page with path "/"
 func (h *Handler) homePage(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
+	if r.URL.Path != "/" || indParse != nil {
 		h.ErrorPage(w, http.StatusNotFound, nil)
 		return
 	}
