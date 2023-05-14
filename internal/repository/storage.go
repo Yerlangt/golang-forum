@@ -40,6 +40,12 @@ func initTables(db *sql.DB) error {
 			AuthorID INTEGER NOT NULL,
 			Title TEXT NOT NULL,
 			Content TEXT NOT NULL
+		);
+		CREATE TABLE IF NOT EXISTS COMMENTS(
+			ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+			AuthorID INTEGER NOT NULL,
+			PostID INTEGER NOT NULL,
+			Content TEXT NOT NULL
 		)
 	`
 	if _, err := db.Exec(query); err != nil {
