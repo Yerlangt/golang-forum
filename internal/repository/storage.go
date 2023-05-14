@@ -43,9 +43,9 @@ func initTables(db *sql.DB) error {
 		);
 		CREATE TABLE IF NOT EXISTS CATEGORIES(
 			ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-			Category TEXT NOT NULL
+			Category TEXT NOT NULL UNIQUE
 		);
-		INSERT INTO CATEGORIES (Category) VALUES ('news'), ('sport'), ('music'), ('kids'), ('hobbies'), ('programming'), ('art'), ('cooking'), ('other');
+		INSERT OR IGNORE INTO CATEGORIES (Category) VALUES ('news'), ('sport'), ('music'), ('kids'), ('hobbies'), ('programming'), ('art'), ('cooking'), ('other');
 		CREATE TABLE IF NOT EXISTS CATEGORYLINK(
 			ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			CategoryID INTEGER NOT NULL,
@@ -63,3 +63,5 @@ func initTables(db *sql.DB) error {
 	}
 	return nil
 }
+
+// INSERT INTO CATEGORIES (Category) VALUES ('news'), ('sport'), ('music'), ('kids'), ('hobbies'), ('programming'), ('art'), ('cooking'), ('other');
