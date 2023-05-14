@@ -41,6 +41,16 @@ func initTables(db *sql.DB) error {
 			Title TEXT NOT NULL,
 			Content TEXT NOT NULL
 		);
+		CREATE TABLE IF NOT EXISTS CATEGORIES(
+			ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+			Category TEXT NOT NULL UNIQUE
+		);
+		INSERT OR IGNORE INTO CATEGORIES (Category) VALUES ('news'), ('sport'), ('music'), ('kids'), ('hobbies'), ('programming'), ('art'), ('cooking'), ('other');
+		CREATE TABLE IF NOT EXISTS CATEGORYLINK(
+			ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+			CategoryID INTEGER NOT NULL,
+			PostID INTEGER NOT NULL
+		);
 		CREATE TABLE IF NOT EXISTS COMMENTS(
 			ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			AuthorID INTEGER NOT NULL,
@@ -54,3 +64,5 @@ func initTables(db *sql.DB) error {
 	}
 	return nil
 }
+
+// INSERT INTO CATEGORIES (Category) VALUES ('news'), ('sport'), ('music'), ('kids'), ('hobbies'), ('programming'), ('art'), ('cooking'), ('other');

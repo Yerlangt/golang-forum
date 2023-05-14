@@ -8,8 +8,11 @@ import (
 
 type Post interface {
 	CreatePost(post models.Post) error
+	GetIDByCategory(elem string) (int, error)
+	CreateLink(postID int, categoryID int) error
 	GetAllPost() ([]models.Post, error)
 	GetPostById(PostID int) (models.Post, error)
+	GetLastID() (int, error)
 }
 
 type PostStorage struct {
@@ -26,8 +29,39 @@ func (s *PostStorage) CreatePost(post models.Post) error {
 	query := `
         INSERT INTO POSTS (AuthorID, Title, Content) VALUES ($1, $2, $3)
     `
+	_, err := s.db.Exec(query, post.AuthorID, post.Title, post.Content)
+	if err != nil {
+		return err
+	}
 
-	if _, err := s.db.Exec(query, post.AuthorID, post.Title, post.Content); err != nil {
+	return nil
+}
+
+func (s *PostStorage) GetLastID() (int, error) {
+	var lastInsertID int64
+	err := s.db.QueryRow("SELECT id FROM POSTS ORDER BY id DESC LIMIT 1").Scan(&lastInsertID)
+	if err != nil {
+		return 0, err
+	}
+	return int(lastInsertID), nil
+}
+
+func (s *PostStorage) GetIDByCategory(elem string) (int, error) {
+	query := `
+        SELECT ID FROM CATEGORIES WHERE Category = ?
+    `
+	var categoryID int
+	if err := s.db.QueryRow(query, elem).Scan(&categoryID); err != nil {
+		return 0, err
+	}
+	return categoryID, nil
+}
+
+func (s *PostStorage) CreateLink(postID int, categoryID int) error {
+	query := `
+        INSERT INTO CATEGORYLINK (CategoryID, PostID) values ($1, $2);
+    `
+	if _, err := s.db.Exec(query, categoryID, postID); err != nil {
 		return err
 	}
 	return nil

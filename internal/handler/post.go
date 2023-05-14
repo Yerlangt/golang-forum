@@ -32,6 +32,10 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 		title, err1 := r.Form["title"]
 		content, err2 := r.Form["content"]
 		category, err3 := r.Form["category1"]
+		if category == nil {
+			category = append(category, "other")
+			err3 = true
+		}
 		fmt.Println(title, content, category)
 
 		if !err1 || !err2 || !err3 {
@@ -43,8 +47,9 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 			Title:    title[0],
 			Content:  content[0],
 			AuthorID: user.ID,
+			Category: category,
 		}
-
+		fmt.Println("handler/post/51: ", post)
 		if err := h.services.Post.CreatePost(post); err != nil {
 			// error out of Validation
 			h.ErrorPage(w, http.StatusInternalServerError, err)

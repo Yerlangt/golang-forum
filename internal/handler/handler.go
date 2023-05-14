@@ -27,6 +27,6 @@ func (h *Handler) InitRoutes() http.Handler {
 	mux.HandleFunc("/posts/create", h.isAuth(h.createPost))
 	mux.HandleFunc("/posts/", h.isAuth(h.postPage))
 
-	mux.Handle("/web/", http.StripPrefix("/web", http.FileServer(http.Dir("web/"))))
+	mux.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("./web/static/"))))
 	return h.middleware(mux)
 }
