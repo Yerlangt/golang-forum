@@ -46,8 +46,9 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 			Title:    title[0],
 			Content:  content[0],
 			AuthorID: user.ID,
+			Category: category,
 		}
-
+		fmt.Println("handler/post/51: ", post)
 		if err := h.services.Post.CreatePost(post); err != nil {
 			// error out of Validation
 			h.ErrorPage(w, http.StatusInternalServerError, err)
