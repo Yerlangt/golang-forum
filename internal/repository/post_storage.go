@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-	"fmt"
 
 	"forum/internal/models"
 )
@@ -68,6 +67,6 @@ func (s *PostStorage) GetAllPost() ([]models.Post, error) {
 		}
 		posts = append(posts, post)
 	}
-	fmt.Println(posts)
+
 	return posts, nil
 }

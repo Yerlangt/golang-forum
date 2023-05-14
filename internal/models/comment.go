@@ -1,8 +1,8 @@
 package models
 
 type Comment struct {
-	ID      int
-	UserID  int
-	PostID  int
-	Content string
+	ID       int
+	AuthorID int
+	PostID   int
+	Content  string
 }
