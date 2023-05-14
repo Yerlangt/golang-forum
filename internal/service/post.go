@@ -11,6 +11,7 @@ import (
 type Post interface {
 	CreatePost(post models.Post) error
 	GetAllPosts() ([]models.Post, error)
+	GetPostById(postID int) (models.Post, error)
 }
 
 type PostService struct {
@@ -36,6 +37,14 @@ func (s *PostService) CreatePost(post models.Post) error {
 		return err
 	}
 	return nil
+}
+
+func (s *PostService) GetPostById(postID int) (models.Post, error) {
+	post, err := s.repository.GetPostById(postID)
+	if err != nil {
+		return post, err
+	}
+	return post, nil
 }
 
 func (s *PostService) GetAllPosts() ([]models.Post, error) {
