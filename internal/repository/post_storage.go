@@ -10,6 +10,7 @@ import (
 type Post interface {
 	CreatePost(post models.Post) error
 	GetAllPost() ([]models.Post, error)
+	GetPostById(PostID int) (models.Post, error)
 }
 
 type PostStorage struct {
@@ -31,6 +32,20 @@ func (s *PostStorage) CreatePost(post models.Post) error {
 		return err
 	}
 	return nil
+}
+
+func (s *PostStorage) GetPostById(PostID int) (models.Post, error) {
+	query := `
+	SELECT ID, AuthorID, Title, Content FROM POSTS  WHERE ID=?;
+	`
+
+	var post models.Post
+
+	if err := s.db.QueryRow(query, PostID).Scan(&post.ID, &post.AuthorID, &post.Title, &post.Content); err != nil {
+		return post, err
+	}
+
+	return post, nil
 }
 
 func (s *PostStorage) GetAllPost() ([]models.Post, error) {

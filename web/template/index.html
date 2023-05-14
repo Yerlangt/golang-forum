@@ -23,7 +23,7 @@
     {{ if .Posts }}
     {{range .Posts}}
     <div>
-        <p>{{.Title}}</p>
+        <a href="/posts/{{.ID}}" ><p>{{.Title}}</p> </a>
         <p>{{.Content}}</p>
     </div>
     <br>

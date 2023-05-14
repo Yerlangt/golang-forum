@@ -4,15 +4,20 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"forum/internal/models"
 )
 
-var postTemp, postParse = template.ParseFiles("web/template/create_post.html")
+var (
+	createPostTemp, createPostParse = template.ParseFiles("web/template/create_post.html")
+	postTemp, postParse             = template.ParseFiles("web/template/post.html")
+)
 
 func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		if err := postTemp.Execute(w, nil); err != nil {
+		if err := createPostTemp.Execute(w, nil); err != nil || createPostParse != nil {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
 		}
@@ -52,4 +57,27 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
+	user := r.Context().Value(ctxKey).(models.User)
+	postID, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/posts/"))
+	if err != nil {
+		h.ErrorPage(w, http.StatusNotFound, err)
+		return
+	}
+
+	if r.Method == http.MethodGet {
+		post, err := h.services.GetPostById(postID)
+		if err != nil {
+			h.ErrorPage(w, http.StatusNotFound, err)
+			return
+		}
+		data := models.TemplateData{
+			User: user,
+			Post: post,
+		}
+		fmt.Println(data)
+		if err := postTemp.Execute(w, data); err != nil || postParse != nil {
+			h.ErrorPage(w, http.StatusInternalServerError, err)
+			return
+		}
+	}
 }
