@@ -5,4 +5,5 @@ type Post struct {
 	AuthorID int
 	Title    string
 	Content  string
+	Category []int
 }
