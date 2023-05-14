@@ -74,7 +74,7 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			User: user,
 			Post: post,
 		}
-		fmt.Println(data)
+
 		if err := postTemp.Execute(w, data); err != nil || postParse != nil {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
