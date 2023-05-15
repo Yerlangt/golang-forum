@@ -6,6 +6,7 @@ type Repository struct {
 	Auth
 	Post
 	Commentary
+	Reaction
 }
 
 func NewRepository(db *sql.DB) *Repository {
@@ -13,5 +14,6 @@ func NewRepository(db *sql.DB) *Repository {
 		Auth:       NewAuthStorage(db),
 		Post:       NewPostStorage(db),
 		Commentary: NewCommentStorage(db),
+		Reaction:   NewReactioStorage(db),
 	}
 }

@@ -10,7 +10,16 @@
     <h1>Title: {{.Post.Title}}</h1>
     <h2>Content: {{.Post.Content}}</h2>
 
+    <script src="https://use.fontawesome.com/fe459689b4.js"></script>
 
+    
+       
+        
+  
+    <form action="/posts/reaction/{{.Post.ID}}" method="Post">
+        <button type="submit" class="btn" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>
+        <button type="submit" class="btn" id="red" name="dislike" value="dislike"><i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></button>
+        </form>
     {{if .Comments}}
     {{range .Comments}}
     <div>
