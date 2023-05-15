@@ -1,3 +1,46 @@
+/*
+ctrl+shift +R --> clear cache
+*/
+
 h1 {
-    color: red;
+    color: rgb(0, 119, 255);
+}
+html, body{
+    height: 100%;
+}
+body{
+    display: grid;
+    grid-template-columns: 200px auto;
+} 
+.logo-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logo {
+    margin-top: 10px;
+    width: 300px;
+    z-index: inherit;
+    position: absolute;
+}
+.logo-back{
+    z-index: 0;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.navigation-wrapper{
+    display: grid;
+    grid-template-columns: auto;
+    padding: 0 20px 20px 20px;
+    
+}
+.navigation-sticky {
+    position: sticky;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

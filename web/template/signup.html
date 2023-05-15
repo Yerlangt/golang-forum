@@ -7,17 +7,24 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/sign-up" method="POST">
-        <label for="email">Email</label><br>
-        <input type="text" id="email" name="email"><br>
-
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
-
-        <label for="password">Password:</label><br>
-        <input type="text" id="password" name="password"><br>
-
-        <input type="submit" value="Submit">
-    </form>
+    <div class = "sign-up">
+        <form action="/sign-up" method="POST">
+            <label for="email">Email</label><br>
+            <input type="text" id="email" name="email"><br>
+    
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username"><br>
+    
+            <label for="password">Password:</label><br>
+            <input type="text" id="password" name="password"><br>
+    
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <div class = "home-page">
+        <p>Do you already have account? If yes you can </p>
+        <a href="/sign-in">sign in</a> <br>
+        <a href="/">Home page</a>
+    </div>
 </body>
 </html>

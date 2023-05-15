@@ -1,33 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/static/style.css" />
-    <title>Document</title>
+    <link rel="icon" href="/image/forum.png">
+    <title>MyForum</title>
 </head>
+
 <body>
-    <h1>HELLO WORLD</h1>
-    {{if .User.UserName}}
-    <a href="/logout">  {{.User.UserName}}</a>
-   
-   
-    {{else}}
-    <a href="/sign-up">Sign-up</a>
-    <a href="/sign-in">Sign-in</a>
-    {{end}}
-
-    <a href="/posts/create">Create Post</a>
-
-    {{ if .Posts }}
-    {{range .Posts}}
-    <div>
-        <a href="/posts/{{.ID}}" ><p>{{.Title}}</p> </a>
-        <p>{{.Content}}</p>
+    <div class="navigation-wrapper">
+        <div class="navigation-sticky">
+            {{if .User.UserName}}
+            <div class="user-data">
+                <p> Hello {{.User.UserName}}</p>
+            </div>
+            <div class="log-out">
+                <a href="/logout"> Log out</a>
+            </div>
+            <div class="create-post">
+                <a href="/posts/create">Create Post</a>
+            </div>
+            {{else}}
+            <div class="sign-up">
+                <a href="/sign-up">Sign-up</a>
+            </div>
+            <div class="sign-in">
+                <a href="/sign-in">Sign-in</a>
+            </div>
+            {{end}}
+        </div>
     </div>
-    <br>
-    {{end}}
-    {{end}}
+    <div class="top-wrapper">
+        <div class="logo-wrapper">
+            <img class="logo-back" src="/image/logo-back.jpg">
+            <img class="logo" src="/image/forum.png"><br>
+        </div>
+        <div class="posts">
+            {{ if .Posts }}
+            {{range .Posts}}
+            <div>
+                <a href="/posts/{{.ID}}">
+                    <p>{{.Title}}</p>
+                </a>
+                <p>{{.Content}}</p>
+            </div>
+            <br>
+            {{end}}
+            {{end}}
+        </div>
+    </div>
 </body>
+
 </html>
