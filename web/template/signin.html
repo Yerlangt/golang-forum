@@ -7,15 +7,21 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/sign-in" method="POST">
+    <div class = "sign-in">
+        <form action="/sign-in" method="POST">
 
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username"><br>
+    
+            <label for="password">Password:</label><br>
+            <input type="text" id="password" name="password"><br>
+    
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <div class = "home-page">
+        <a href="/">Home page</a>
+    </div>
 
-        <label for="password">Password:</label><br>
-        <input type="text" id="password" name="password"><br>
-
-        <input type="submit" value="Submit">
-    </form>
 </body>
 </html>
