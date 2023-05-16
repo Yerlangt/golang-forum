@@ -7,6 +7,7 @@ type Service struct {
 	Post
 	Commentary
 	Reaction
+	UserPage
 }
 
 func NewService(repository *repository.Repository) *Service {
@@ -15,5 +16,6 @@ func NewService(repository *repository.Repository) *Service {
 		Post:       NewPostService(repository.Post),
 		Commentary: NewCommentService(repository.Commentary),
 		Reaction:   NewReactionService(repository.Reaction),
+		UserPage:   NewUserService(repository.User),
 	}
 }

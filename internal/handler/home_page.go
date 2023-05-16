@@ -1,8 +1,10 @@
 package handler
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
+	"reflect"
 
 	"forum/internal/models"
 )
@@ -16,8 +18,16 @@ func (h *Handler) homePage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user := r.Context().Value(ctxKey).(models.User)
-
-	posts, err := h.services.GetAllPosts()
+	categories := memberTest(r, "ctgr")
+	fmt.Println(categories)
+	var posts []models.Post
+	var err error
+	if reflect.DeepEqual(categories, []string{"news", "sport", "music", "kids", "hobbies", "programming", "art", "cooking", "other"}) {
+		posts, err = h.services.GetAllPosts()
+	} else {
+		posts, err = h.services.GetPostsByCategory(categories)
+	}
+	fmt.Println(err)
 	if err != nil {
 		h.ErrorPage(w, http.StatusInternalServerError, err)
 		return

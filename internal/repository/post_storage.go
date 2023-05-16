@@ -13,6 +13,7 @@ type Post interface {
 	GetAllPost() ([]models.Post, error)
 	GetPostById(PostID int) (models.Post, error)
 	GetLastID() (int, error)
+	GetPostsByCategoryID(categoryID int) ([]models.Post, error)
 }
 
 type PostStorage struct {
@@ -55,6 +56,26 @@ func (s *PostStorage) GetIDByCategory(elem string) (int, error) {
 		return 0, err
 	}
 	return categoryID, nil
+}
+
+func (s *PostStorage) GetPostsByCategoryID(categoryID int) ([]models.Post, error) {
+	query := `
+        SELECT ID, AuthorID, Title, Content FROM POSTS WHERE ID = (SELECT (PostID) FROM CATEGORYLINK WHERE (CategoryID) = ($1));
+    `
+	rows, err := s.db.Query(query, categoryID)
+	if err != nil {
+		return nil, err
+	}
+	var posts []models.Post
+	for rows.Next() {
+		var post models.Post
+		if err := rows.Scan(&post.ID, &post.AuthorID, &post.Title, &post.Content); err != nil {
+			return posts, err
+		}
+		posts = append(posts, post)
+	}
+
+	return posts, nil
 }
 
 func (s *PostStorage) CreateLink(postID int, categoryID int) error {
