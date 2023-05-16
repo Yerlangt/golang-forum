@@ -80,10 +80,20 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("error getting comments by post ID: %s", err)
 		}
+		reaction, err := h.services.Reaction.GetReactionByIDs(postID, user.ID)
+		if err != nil {
+			log.Printf("error getting GetReactionByIDs: %s", err)
+		}
+		fmt.Println(reaction)
+		// <!--{{if .Reaction.Type eq like}}
+		// <button type="submit" class="btn green" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>
+		// {else}}-->
+		// }
 		data := models.TemplateData{
 			User:     user,
 			Post:     post,
 			Comments: comments,
+			Reaction: reaction,
 		}
 
 		if err := postTemp.Execute(w, data); err != nil || postParse != nil {
