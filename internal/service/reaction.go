@@ -1,6 +1,8 @@
 package service
 
 import (
+	"database/sql"
+
 	"forum/internal/models"
 	"forum/internal/repository"
 )
@@ -21,7 +23,7 @@ func NewReactionService(repository repository.Reaction) *ReactionService {
 
 func (s *ReactionService) CreateReaction(reaction models.Reaction) error {
 	exist, err := s.repository.GetReactionByIDs(reaction.PostID, reaction.AuthorID)
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
 	if exist == (models.Reaction{}) {
