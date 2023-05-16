@@ -12,10 +12,14 @@
 
 <body>
     <div class="navigation-wrapper">
+        <!-- <img class="navigation-back" src="/image/navigation-back.jpg"> -->
         <div class="navigation-sticky">
             {{if .User.UserName}}
             <div class="user-data">
                 <p> Hello {{.User.UserName}}</p>
+            </div>
+            <div class = "user-page">
+                <a href="/user/{{.User.UserName}}"> Personal Page</a>
             </div>
             <div class="log-out">
                 <a href="/logout"> Log out</a>
