@@ -5,4 +5,5 @@ type TemplateData struct {
 	Posts    []Post
 	Post     Post
 	Comments []Comment
+	Reaction Reaction
 }
