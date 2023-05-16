@@ -13,6 +13,7 @@ type Post interface {
 	CreatePost(post models.Post) error
 	GetAllPosts() ([]models.Post, error)
 	GetPostById(postID int) (models.Post, error)
+	GetPostsByCategory(category []string) ([]models.Post, error)
 }
 
 type PostService struct {
@@ -65,4 +66,38 @@ func (s *PostService) GetPostById(postID int) (models.Post, error) {
 
 func (s *PostService) GetAllPosts() ([]models.Post, error) {
 	return s.repository.GetAllPost()
+}
+
+// need to fix and delete similar posts
+func (s *PostService) GetPostsByCategory(category []string) ([]models.Post, error) {
+	var posts []models.Post
+	for _, elem := range category {
+		categoryID, err := s.repository.GetIDByCategory(elem)
+		if err != nil {
+			return nil, err
+		}
+		postTemp, err := s.repository.GetPostsByCategoryID(categoryID)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, postTemp...)
+	}
+	posts = removeDublicates(posts)
+	return posts, nil
+}
+
+func removeDublicates(posts []models.Post) []models.Post {
+	uniqueMap := make(map[int]bool)
+	uniquePost := make([]models.Post, 0)
+
+	for _, post := range posts {
+		if !uniqueMap[post.ID] {
+
+			uniqueMap[post.ID] = true
+
+			uniquePost = append(uniquePost, post)
+		}
+	}
+
+	return uniquePost
 }
