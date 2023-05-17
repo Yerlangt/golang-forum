@@ -6,10 +6,12 @@ h1 {
     color: rgb(0, 119, 255);
 }
 html, body{
+    margin: 0;
+    padding: 0;
     height: 100%;
 }
 body{
-    background-color: rgb(255, 231, 203);
+    background-color: #fff;
     display: grid;
     grid-template-columns: 200px auto;
 } 
@@ -39,8 +41,9 @@ body{
     border-radius: 10px;
 } */
 .navigation-wrapper{
-    background-image: url('/image/navigation-back.jpg');
-    border-radius: 10px;
+    /* background-image: url('/image/navigation-back.jpg'); */
+    background-color:#00c4cc;
+    border-radius: 20px;
     display: grid;
     grid-template-columns: auto;
     margin: 0 5px 0px 0px;
