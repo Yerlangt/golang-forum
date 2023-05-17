@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,51 +9,60 @@
 
     <title>Document</title>
 </head>
+
 <body>
-    <div>
-        <h2>Title: {{.Post.Title}}</h1>
-        <h2>Content: {{.Post.Content}}</h2>
+        <div>
+            <h2>Title: {{.Post.Title}}</h1>
+                <h2>Content: {{.Post.Content}}</h2>
 
-    </div>
-   
+        </div>
 
-    <script src="https://use.fontawesome.com/fe459689b4.js"></script>
-       
-        
-  
-    <form action="/posts/reaction/{{.Post.ID}}" method="Post">
-        {{if eq .Reaction.Type "like"}}
-        <button type="submit" class="btn green" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>
-        {{else}}
-        <button type="submit" class="btn" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>
+
+        <script src="https://use.fontawesome.com/fe459689b4.js"></script>
+
+
+
+        <form action="/posts/reaction/{{.Post.ID}}" method="Post">
+            {{if eq .Reaction.Type "like"}}
+            <button type="submit" class="btn green" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg"
+                    aria-hidden="true"></i></button>
+            {{else}}
+            <button type="submit" class="btn" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg"
+                    aria-hidden="true"></i></button>
+            {{end}}
+
+            {{if eq .Reaction.Type "dislike"}}
+            <button type="submit" class="btn red" id="red" name="dislike" value="dislike"><i
+                    class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></button>
+            {{else}}
+            <button type="submit" class="btn" id="red" name="dislike" value="dislike"><i class="fa fa-thumbs-down fa-lg"
+                    aria-hidden="true"></i></button>
+            {{end}}
+
+
+
+        </form>
+        {{if .Comments}}
+        {{range .Comments}}
+        <div>
+            <p>{{.AuthorName}}</p>
+            <p>{{.Content}}</p>
+        </div>
+        <br>
         {{end}}
-
-        {{if eq .Reaction.Type "dislike"}}
-        <button type="submit" class="btn red" id="red" name="dislike" value="dislike"><i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></button>
-        {{else}}
-        <button type="submit" class="btn" id="red" name="dislike" value="dislike"><i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></button>
         {{end}}
+        <form action="/posts/{{.Post.ID}}" method="Post">
 
-
-       
-    </form>
-    {{if .Comments}}
-    {{range .Comments}}
-    <div>
-        <p>{{.AuthorName}}</p> 
-        <p>{{.Content}}</p>
-    </div>
-    <br>
-    {{end}}
-    {{end}}
-    <form action="/posts/{{.Post.ID}}" method="Post">
-       
-            <input name="content" type="text" class="form-control" aria-label="Text input with segmented dropdown button" required>
+            <input name="content" type="text" class="form-control"
+                aria-label="Text input with segmented dropdown button" required>
             <input type="submit" value="Submit">
-      
-    </form>
-    <div class="btn">
-        <button class="button"><a href="/">Home page</a></button>
-    </div>
+
+        </form>
+        <div class="btn">
+            <button class="button"><a href="/">Home page</a></button>
+        </div>
+    
+
 </body>
+
 </html>

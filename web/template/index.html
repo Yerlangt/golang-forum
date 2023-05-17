@@ -11,64 +11,100 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <title>MyForum</title>
 </head>
 
 <body>
     <div class="container">
-        <header class="header">
+        <div class="header">
             <div class="logo">
                 <img class="logoimage" src="/image/eagle.png" alt="">
                 <div class="logoname"><a href="/">Qyran</a></div>
             </div>
             <nav class="navbar">
-                <div class="navitem">
-                    <div class="itemicon">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" class="svgicon"><g><path d="M12 1.696L.622 8.807l1.06 1.696L3 9.679V19.5C3 20.881 4.119 22 5.5 22h13c1.381 0 2.5-1.119 2.5-2.5V9.679l1.318.824 1.06-1.696L12 1.696zM12 16.5c-1.933 0-3.5-1.567-3.5-3.5s1.567-3.5 3.5-3.5 3.5 1.567 3.5 3.5-1.567 3.5-3.5 3.5z"></path></g></svg>
-                    </div>
-                    <div class="itemlabel current">
-                        <a href="/">Home</a>
-                    </div>
-                    
-                </div>
-                <div class="navitem">
-                    <div class="itemicon">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" class="svgicon"><g><path d="M3 4.5C3 3.12 4.12 2 5.5 2h13C19.88 2 21 3.12 21 4.5v15c0 1.38-1.12 2.5-2.5 2.5h-13C4.12 22 3 20.88 3 19.5v-15zM5.5 4c-.28 0-.5.22-.5.5v15c0 .28.22.5.5.5h13c.28 0 .5-.22.5-.5v-15c0-.28-.22-.5-.5-.5h-13zM16 10H8V8h8v2zm-8 2h8v2H8v-2z"></path></g></svg>
-                    </div>
-                    <div class="itemlabel">
-                        My Posts
-                    </div>
-                </div>
+                <a class="navitem" href="/">
+                    <i class="bi bi-house"></i>
+                    Home
+                </a>
             </nav>
-
-           
-            
-        </header>
-
-
-        <main class="main">
-         
-        </main>
-
-
-    </div>
-        <!---
+            <form id="filter" action="/" method="GET">
+                <section>
+                    <div class="categories">
+                        <div class="category">
+                            <input type="checkbox" id="1-category" name="ctgr" value="news" />
+                            <label for="1-category">news</label>
+                        </div>
+                        <div class="category">
+                            <input type="checkbox" id="2-category" name="ctgr" value="sport" />
+                            <label for="2-category">sport</label>
+                        </div>
+                        <div class="category">
+                            <input type="checkbox" id="3-category" name="ctgr" value="music" />
+                            <label for="3-category">music</label>
+                        </div>
+                        <div class="category">
+                            <input type="checkbox" id="4-category" name="ctgr" value="kids" />
+                            <label for="4-category">kids</label>
+                        </div>
+                        <div class="category">
+                            <input type="checkbox" id="5-category" name="ctgr" value="hobbies" />
+                            <label for="5-category">hobbies</label>
+                        </div>
+                        <div class="category">
+                            <input type="checkbox" id="6-category" name="ctgr" value="programming" />
+                            <label for="6-category">programming</label>
+                        </div>
+                        <div class="category">
+                            <input type="checkbox" id="7-category" name="ctgr" value="art" />
+                            <label for="7-category">art</label>
+                        </div>
+                        <div class="category">
+                            <input type="checkbox" id="8-category" name="ctgr" value="cooking" />
+                            <label for="8-category">cooking</label>
+                        </div>
+                        <div class="category">
+                            <input type="checkbox" id="9-category" name="ctgr" value="other" />
+                            <label for="9-category">other</label>
+                        </div>
+                    </div>
+                </section>
+                <div class="filter-btn">
+                    <button type="submit" class="button">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="posts">
+            {{ if .Posts }}
+            {{range .Posts}}
+            <div class="post">
+                <a href="/posts/{{.ID}}">
+                    <p>{{.Title}}</p>
+                </a>
+                <p>{{.Content}}</p>
+            </div>
+            <br>
+            {{end}}
+            {{end}}
+        </div>
         <div class="navigation-wrapper">
-      
             <div class="navigation-sticky">
                 {{if .User.UserName}}
                 <div class="user-data">
                     <p> Hello {{.User.UserName}}</p>
                 </div>
-                <div class = "user-page">
-                    <a href="/user/{{.User.UserName}}"> Personal Page</a>
-                </div>
-                <div class="log-out">
-                    <a href="/logout"> Log out</a>
-                </div>
-                <div class="create-post">
-                    <a href="/posts/create">Create Post</a>
-                </div>
+                <a class="navitem" href="/user/{{.User.UserName}}">
+                    <i class="bi bi-card-text"></i>
+                    My Posts
+                </a>
+                <a class="navitem" href="/logout">
+                    <i class="bi bi-box-arrow-left"></i>
+                    Log out
+                </a>
+                <a class="navitem" href="/posts/create">
+                    <i class="bi bi-pencil-square"></i>
+                    Create Post
+                </a>
                 {{else}}
                 <div class="sign-up">
                     <a href="/sign-up">Sign-up</a>
@@ -77,77 +113,8 @@
                     <a href="/sign-in">Sign-in</a>
                 </div>
                 {{end}}
-    
-                <form id="filter" action="/" method="GET">
-                    <section>
-                        <div class="categories">
-                            <div class="category">
-                                <input type="checkbox" id="1-category" name="ctgr" value="news" />
-                                <label for="1-category">news</label>
-                            </div>
-                            <div class="category">
-                                <input type="checkbox" id="2-category" name="ctgr" value="sport" />
-                                <label for="2-category">sport</label>
-                            </div>
-                            <div class="category">
-                                <input type="checkbox" id="3-category" name="ctgr" value="music" />
-                                <label for="3-category">music</label>
-                            </div>
-                            <div class="category">
-                                <input type="checkbox" id="4-category" name="ctgr" value="kids" />
-                                <label for="4-category">kids</label>
-                            </div>
-                            <div class="category">
-                                <input type="checkbox" id="5-category" name="ctgr" value="hobbies" />
-                                <label for="5-category">hobbies</label>
-                            </div>
-                            <div class="category">
-                                <input type="checkbox" id="6-category" name="ctgr" value="programming" />
-                                <label for="6-category">programming</label>
-                            </div>
-                            <div class="category">
-                                <input type="checkbox" id="7-category" name="ctgr" value="art" />
-                                <label for="7-category">art</label>
-                            </div>
-                            <div class="category">
-                                <input type="checkbox" id="8-category" name="ctgr" value="cooking" />
-                                <label for="8-category">cooking</label>
-                            </div>
-                            <div class="category">
-                                <input type="checkbox" id="9-category" name="ctgr" value="other" />
-                                <label for="9-category">other</label>
-                            </div>
-                        </div>
-                    </section>
-                    <div class="filter-btn">
-                        <button type="submit" class="button">Submit</button>
-                    </div>
-                </form>
             </div>
-        </div>   
-
-
-        <div class="top-wrapper">
-            <div class="logo-wrapper">
-               
-            
-            </div>
-            <div class="posts">
-                {{ if .Posts }}
-                {{range .Posts}}
-                <div>
-                    <a href="/posts/{{.ID}}">
-                        <p>{{.Title}}</p>
-                    </a>
-                    <p>{{.Content}}</p>
-                </div>
-                <br>
-                {{end}}
-                {{end}}
-            </div>
-        </div>--->
-    
-    
+        </div>
 </body>
 
 </html>
