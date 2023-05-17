@@ -6,4 +6,5 @@ type TemplateData struct {
 	Post     Post
 	Comments []Comment
 	Reaction Reaction
+	Error    string
 }

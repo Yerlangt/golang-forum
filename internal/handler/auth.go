@@ -30,9 +30,19 @@ func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 		email, err1 := r.Form["email"]
 		username, err2 := r.Form["username"]
 		password, err3 := r.Form["password"]
+		confirmation, err4 := r.Form["confirm"]
 
-		if !err1 || !err2 || !err3 {
+		if !err1 || !err2 || !err3 || !err4 {
 			h.ErrorPage(w, http.StatusBadRequest, nil)
+			return
+		}
+		if confirmation[0] != password[0] {
+			data := models.TemplateData{
+				Error: "Passwords do not correspond",
+			}
+			if err := signup.Execute(w, data); err != nil {
+				h.ErrorPage(w, http.StatusInternalServerError, err)
+			}
 			return
 		}
 		user := models.User{
@@ -42,9 +52,14 @@ func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if err := h.services.Auth.CreateUser(user); err != nil {
-			// error out of Validation
-			h.ErrorPage(w, http.StatusInternalServerError, err)
+			data := models.TemplateData{
+				Error: err.Error(),
+			}
+			if err := signup.Execute(w, data); err != nil {
+				h.ErrorPage(w, http.StatusInternalServerError, err)
+			}
 			return
+
 		}
 
 		http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -76,7 +91,13 @@ func (h *Handler) signIn(w http.ResponseWriter, r *http.Request) {
 		session, err := h.services.Auth.SetSession(username[0], password[0])
 		if err != nil {
 			if errors.Is(err, service.ErrNoUser) || errors.Is(err, service.ErrWrongPassword) {
-				h.ErrorPage(w, http.StatusUnauthorized, err)
+				data := models.TemplateData{
+					Error: err.Error(),
+				}
+				if err := signin.Execute(w, data); err != nil {
+					h.ErrorPage(w, http.StatusInternalServerError, err)
+					return
+				}
 				return
 			}
 			h.ErrorPage(w, http.StatusInternalServerError, err)

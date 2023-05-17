@@ -12,16 +12,15 @@ import (
 func (h *Handler) createReaction(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value(ctxKey).(models.User)
 	postID, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/posts/reaction/"))
-
+	if err != nil {
+		h.ErrorPage(w, http.StatusInternalServerError, err)
+		return
+	}
 	if err := r.ParseForm(); err != nil {
 		h.ErrorPage(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	fmt.Println(r.Form)
-	if err != nil {
-		fmt.Println(err)
-	}
 	var reactionType string
 	if val, ok := r.Form["like"]; ok {
 		reactionType = val[0]

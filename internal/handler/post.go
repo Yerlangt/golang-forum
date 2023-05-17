@@ -36,7 +36,6 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 			category = append(category, "other")
 			err3 = true
 		}
-		fmt.Println(title, content, category)
 
 		if !err1 || !err2 || !err3 {
 			h.ErrorPage(w, http.StatusBadRequest, nil)
@@ -49,7 +48,7 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 			AuthorID: user.ID,
 			Category: category,
 		}
-		fmt.Println("handler/post/51: ", post)
+
 		if err := h.services.Post.CreatePost(post); err != nil {
 			// error out of Validation
 			h.ErrorPage(w, http.StatusInternalServerError, err)

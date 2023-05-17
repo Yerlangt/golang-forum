@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"forum/internal/models"
@@ -39,7 +38,6 @@ func (s *PostService) CreatePost(post models.Post) error {
 		return err
 	}
 	postID, err := s.repository.GetLastID()
-	fmt.Println("service/post/46: ", err)
 	if err != nil {
 		return err
 	}
@@ -48,7 +46,7 @@ func (s *PostService) CreatePost(post models.Post) error {
 		if err != nil {
 			return err
 		}
-		fmt.Println("service/post/48: ", postID, categoryID)
+
 		if err := s.repository.CreateLink(postID, categoryID); err != nil {
 			return err
 		}
