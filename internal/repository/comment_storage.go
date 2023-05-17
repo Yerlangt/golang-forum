@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-	"fmt"
 
 	"forum/internal/models"
 )
@@ -29,10 +28,9 @@ func (s *CommentStorage) CreateComment(comment models.Comment) error {
     `
 
 	if _, err := s.db.Exec(query, comment.AuthorID, comment.PostID, comment.Content, comment.AuthorName); err != nil {
-		fmt.Println(err)
 		return err
 	}
-	fmt.Println(comment)
+
 	return nil
 }
 

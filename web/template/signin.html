@@ -4,24 +4,53 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/static/auth.css" />
+    <link rel="icon" href="/image/eagle.png">
+
+    <title>Sign-in</title>
 </head>
 <body>
-    <div class = "sign-in">
-        <form action="/sign-in" method="POST">
 
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username"><br>
-    
-            <label for="password">Password:</label><br>
-            <input type="text" id="password" name="password"><br>
-    
-            <input type="submit" value="Submit">
-        </form>
-    </div>
-    <div class = "home-page">
-        <a href="/">Home page</a>
-    </div>
+<div class="container" id="container">
+	
+	<div class="form-container sign-in-container">
+        <div class="homebtn">
+            <div class="itemicon">
+                <svg viewBox="0 0 24 24" aria-hidden="true" class="svgicon"><g><path d="M12 1.696L.622 8.807l1.06 1.696L3 9.679V19.5C3 20.881 4.119 22 5.5 22h13c1.381 0 2.5-1.119 2.5-2.5V9.679l1.318.824 1.06-1.696L12 1.696zM12 16.5c-1.933 0-3.5-1.567-3.5-3.5s1.567-3.5 3.5-3.5 3.5 1.567 3.5 3.5-1.567 3.5-3.5 3.5z"></path></g></svg>
+            </div>
+            <div class="itemlabel current">
+                <a class="itemlabel" href="/">Home</a>
+            </div>
+        </div>
+        
+		<form action="/sign-in" method="POST">
+			<h1>Sign in</h1>
+			<input type="text" id="username" name="username" placeholder="Username"> <br>
+            <input type="text" id="password" name="password" placeholder="Password"><br>
+            <div class="errinfo">
+                {{.Error}}
+            </div>
+            
+			
+			<button>Sign In</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p>To keep connected with us please login with your personal info</p>
+				<button class="ghost" id="signIn">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>Enter your personal details and start journey with us</p>
+				<a href="/sign-up"><button class="ghost" id="signUp" >Sign Up</button></a>
+			</div>
+		</div>
+	</div>
+</div>
+
 
 </body>
 </html>

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -18,7 +17,7 @@ func (h *Handler) userPage(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		userID, err := h.services.UserPage.GetUserIDByNickName(userNick)
 		if err != nil {
-			fmt.Println(err)
+
 			h.ErrorPage(w, http.StatusNotFound, err)
 			return
 		}
@@ -31,7 +30,7 @@ func (h *Handler) userPage(w http.ResponseWriter, r *http.Request) {
 			Posts: posts,
 		}
 		if err := userTemp.Execute(w, data); err != nil || userParse != nil {
-			fmt.Println("error in Parcing")
+
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
 		}
