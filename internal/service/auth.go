@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"time"
 
 	"forum/internal/models"
@@ -63,20 +62,17 @@ func (s *AuthService) CreateUser(user models.User) error {
 	// validate email
 	res, strErr := validateEmail(user.Email)
 	if !res {
-		// fmt.Println(strErr)
 		return errors.New(strErr)
 	}
 	// validate password
 	res, strErr = validatePassword(user.Password)
 	if !res {
-		// fmt.Println(strErr)
 		return errors.New(strErr)
 	}
 
 	// validate username
 	res, strErr = validateUsername(user.UserName)
 	if !res {
-		// fmt.Println(strErr)
 		return errors.New(strErr)
 	}
 
@@ -87,7 +83,7 @@ func (s *AuthService) CreateUser(user models.User) error {
 	}
 
 	user.Password = password
-	fmt.Println(user)
+
 	return s.repository.CreateUser(user)
 }
 

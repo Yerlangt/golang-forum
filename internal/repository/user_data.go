@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-	"fmt"
 
 	"forum/internal/models"
 )
@@ -28,7 +27,7 @@ func (s *UserStorage) GetUserIDByNickName(nickName string) (int, error) {
 	if err := s.db.QueryRow(query, nickName).Scan(&ID); err != nil {
 		return 0, err
 	}
-	fmt.Println("repo/userdata: ", ID)
+
 	return ID, nil
 }
 

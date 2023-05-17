@@ -2,7 +2,7 @@ package handler
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"net/http"
 
 	"forum/internal/models"
@@ -22,7 +22,7 @@ func (h *Handler) middleware(next http.Handler) http.Handler {
 		} else if err == nil {
 			user, err = h.services.Auth.UserByToken(cookie.Value)
 			if err != nil {
-				fmt.Printf("user by token: %s\n", err)
+				log.Printf("user by token: %s\n", err)
 			}
 		} else {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
