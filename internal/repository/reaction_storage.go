@@ -17,7 +17,7 @@ type ReactioStorage struct {
 }
 
 // return structure with db
-func NewReactioStorage(db *sql.DB) *ReactioStorage {
+func NewReactionStorage(db *sql.DB) *ReactioStorage {
 	return &ReactioStorage{
 		db: db,
 	}
