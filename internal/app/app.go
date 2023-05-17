@@ -12,7 +12,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-const port = "8080"
+const port = "8081"
 
 func Run() {
 	db, err := repository.OpenDB("store.db")
