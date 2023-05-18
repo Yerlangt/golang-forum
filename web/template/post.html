@@ -56,45 +56,59 @@
     
     
             <script src="https://use.fontawesome.com/fe459689b4.js"></script>
-    
-    
-    
-            <form action="/posts/reaction/{{.Post.ID}}" method="Post">
-                {{if eq .Reaction.Type "like"}}
-                <button type="submit" class="btn green" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg"
-                        aria-hidden="true"></i></button>
-                {{else}}
-                <button type="submit" class="btn" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg"
-                        aria-hidden="true"></i></button>
-                {{end}}
-    
-                {{if eq .Reaction.Type "dislike"}}
-                <button type="submit" class="btn red" id="red" name="dislike" value="dislike"><i
-                        class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></button>
-                {{else}}
-                <button type="submit" class="btn" id="red" name="dislike" value="dislike"><i class="fa fa-thumbs-down fa-lg"
-                        aria-hidden="true"></i></button>
-                {{end}}
-    
-    
-    
-            </form>
-            {{if .Comments}}
-            {{range .Comments}}
-            <div>
-                <p>{{.AuthorName}}</p>
-                <p>{{.Content}}</p>
+
+            <div class="reaction">
+                
+                    <form action="/posts/reaction/{{.Post.ID}}" method="Post">
+                        
+                            {{if eq .Reaction.Type "like"}}
+                            <button type="submit" class="btn green" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg"
+                                    aria-hidden="true"></i></button>
+                            {{else}}
+                            <button type="submit" class="btn" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg"
+                                    aria-hidden="true"></i></button>
+                            {{end}}
+                           
+                                {{.Post.LikeCount}}
+                          
+                  
+                       
+                            {{if eq .Reaction.Type "dislike"}}
+                            <button type="submit" class="btn red dislike" id="red" name="dislike" value="dislike"><i
+                                    class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></button>
+                            {{else}}
+                            <button type="submit" class="btn dislike" id="red" name="dislike" value="dislike"><i class="fa fa-thumbs-down fa-lg"
+                                    aria-hidden="true"></i></button>
+                            {{end}}
+                            {{.Post.DislikeCount}}
+                       
+                    </form>
+              
+                
             </div>
-            <br>
-            {{end}}
-            {{end}}
-            <form action="/posts/{{.Post.ID}}" method="Post">
-    
-                <input name="content" type="text" class="form-control"
-                    aria-label="Text input with segmented dropdown button" required>
-                <input type="submit" value="Submit">
-    
-            </form>
+
+            <div class="comments">
+                <div class="commentlabel">Comments</div>
+
+                {{if .Comments}}
+                {{range .Comments}}
+                <div>
+                    <p>{{.AuthorName}}</p>
+                    <p>{{.Content}}</p>
+                </div>
+                <br>
+                {{end}}
+                {{end}}
+                <form action="/posts/{{.Post.ID}}" method="Post">
+        
+                    <input name="content" type="text" class="form-control"
+                        aria-label="Text input with segmented dropdown button" required>
+                    <input type="submit" value="Submit">
+        
+                </form>
+            </div>
+            
+            
            
         </div>
         <div class="navigation-wrapper">

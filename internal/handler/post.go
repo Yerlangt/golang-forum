@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -76,6 +75,9 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		author, err := h.services.Auth.GetUserByID(post.AuthorID)
+		if err != nil {
+			log.Printf("error getting author by ID: %s", err)
+		}
 		comments, err := h.services.GetCommentsByPostID(postID)
 		if err != nil {
 			log.Printf("error getting comments by post ID: %s", err)
@@ -84,11 +86,14 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("error getting GetReactionByIDs: %s", err)
 		}
-		fmt.Println(reaction)
-		// <!--{{if .Reaction.Type eq like}}
-		// <button type="submit" class="btn green" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>
-		// {else}}-->
-		// }
+		likes, dislikes, err := h.services.Reaction.GetReactionCountByPostID(postID)
+		if err != nil {
+			log.Printf("error getting GetReactionCount: %s", err)
+		} else {
+			post.LikeCount = likes
+			post.DislikeCount = dislikes
+		}
+
 		data := models.TemplateData{
 			User:     user,
 			Post:     post,

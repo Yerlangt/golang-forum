@@ -10,6 +10,7 @@ type Reaction interface {
 	CreateReaction(reaction models.Reaction) error
 	GetReactionByIDs(PostID, AuthorID int) (models.Reaction, error)
 	ChangeReaction(reaction models.Reaction) error
+	GetReactionCountByPostID(PostID int) (int, int, error)
 }
 
 type ReactioStorage struct {
@@ -59,4 +60,25 @@ func (s *ReactioStorage) ChangeReaction(reaction models.Reaction) error {
 	}
 
 	return nil
+}
+
+func (s *ReactioStorage) GetReactionCountByPostID(PostID int) (int, int, error) {
+	queryDislikes := `
+	SELECT COUNT(ID) FROM REACTIONS WHERE PostID=$1 AND Type ="dislike";
+	`
+
+	queryLikes := `
+	SELECT COUNT(ID) FROM REACTIONS WHERE PostID=$1 AND Type ="like";
+	`
+	var likes, dislikes int
+
+	if err := s.db.QueryRow(queryLikes, PostID).Scan(&likes); err != nil {
+		return 0, 0, err
+	}
+
+	if err := s.db.QueryRow(queryDislikes, PostID).Scan(&dislikes); err != nil {
+		return 0, 0, err
+	}
+
+	return likes, dislikes, nil
 }

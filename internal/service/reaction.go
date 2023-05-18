@@ -10,6 +10,7 @@ import (
 type Reaction interface {
 	CreateReaction(reaction models.Reaction) error
 	GetReactionByIDs(PostID, AuthorID int) (models.Reaction, error)
+	GetReactionCountByPostID(PostID int) (int, int, error)
 }
 type ReactionService struct {
 	repository repository.Reaction
@@ -19,6 +20,10 @@ func NewReactionService(repository repository.Reaction) *ReactionService {
 	return &ReactionService{
 		repository: repository,
 	}
+}
+
+func (s *ReactionService) GetReactionCountByPostID(PostID int) (int, int, error) {
+	return s.repository.GetReactionCountByPostID(PostID)
 }
 
 func (s *ReactionService) CreateReaction(reaction models.Reaction) error {
