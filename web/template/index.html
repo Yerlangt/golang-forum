@@ -84,9 +84,13 @@
             {{range .Posts}}
             <div class="post">
                 <a href="/posts/{{.ID}}">
-                    <p>{{.Title}}</p>
+                    <p class = "Title">{{.Title}}</p>
                 </a>
-                <p>{{.Content}}</p>
+                <p>{{.Content}} ... </p>
+                <!-- <a href="/posts/{{.ID}}">
+                    read all 
+                    <i class="bi bi-book"></i>
+                </a> -->
                 <img class="ornament" src="/image/ornament.png" alt="">
             </div>
             <br>

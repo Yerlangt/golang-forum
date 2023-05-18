@@ -179,16 +179,6 @@ input[type="checkbox"]:checked+label{
     accent-color: var(--blue);
     /* background-color: var(--blue); */
 }
-/* input[type="checkbox"]{
-    -webkit-appearance: none;
-    appearance: none;  
-    cursor: pointer;
-}
-input[type="checkbox"]::before{
-    cursor: pointer;
-} */
-
-
 
 .green {
     color: green;
