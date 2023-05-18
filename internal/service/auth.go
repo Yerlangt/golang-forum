@@ -19,6 +19,7 @@ type Auth interface {
 	SetSession(username, password string) (models.Session, error)
 	UserByToken(token string) (models.User, error)
 	DeleteSession(token string) error
+	GetUserByID(ID int) (models.User, error)
 }
 
 // structure that will return repository
@@ -27,9 +28,9 @@ type AuthService struct {
 }
 
 var (
-	ErrNoUser        = errors.New("User doesn't exist")
-	ErrWrongPassword = errors.New("Incorrect password")
-	ErrUserTaken     = errors.New("User with this data is taken")
+	ErrNoUser        = errors.New("user doesn't exist")
+	ErrWrongPassword = errors.New("incorrect password")
+	ErrUserTaken     = errors.New("user with this data is taken")
 )
 
 func NewAuthService(repository repository.Auth) *AuthService {
@@ -150,4 +151,8 @@ func (s *AuthService) generateToken() (string, error) {
 func (s *AuthService) generateHashedPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	return string(hash), err
+}
+
+func (s *AuthService) GetUserByID(ID int) (models.User, error) {
+	return s.repository.GetUserById(ID)
 }
