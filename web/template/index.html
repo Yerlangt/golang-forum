@@ -27,53 +27,55 @@
                     <i class="bi bi-house"></i>
                     Home
                 </a>
-            </nav>
-            <form id="filter" action="/" method="GET">
-                <section>
-                    <div class="categories">
-                        <div class="category">
-                            <input type="checkbox" id="1-category" name="ctgr" value="news" />
-                            <label for="1-category">news</label>
+                <p> Filter</p>
+                <div class="filter-class">
+                    <form id="filter" action="/" method="GET">
+                        <section>
+                            <div class="categories">
+                                <div class="category">
+                                    <input type="checkbox" id="1-category" name="ctgr" value="news" />
+                                    <label for="1-category">news</label>
+                                </div>
+                                <div class="category">
+                                    <input type="checkbox" id="2-category" name="ctgr" value="sport" />
+                                    <label for="2-category">sport</label>
+                                </div>
+                                <div class="category">
+                                    <input type="checkbox" id="3-category" name="ctgr" value="music" />
+                                    <label for="3-category">music</label>
+                                </div>
+                                <div class="category">
+                                    <input type="checkbox" id="4-category" name="ctgr" value="kids" />
+                                    <label for="4-category">kids</label>
+                                </div>
+                                <div class="category">
+                                    <input type="checkbox" id="5-category" name="ctgr" value="hobbies" />
+                                    <label for="5-category">hobbies</label>
+                                </div>
+                                <div class="category">
+                                    <input type="checkbox" id="6-category" name="ctgr" value="programming" />
+                                    <label for="6-category">programming</label>
+                                </div>
+                                <div class="category">
+                                    <input type="checkbox" id="7-category" name="ctgr" value="art" />
+                                    <label for="7-category">art</label>
+                                </div>
+                                <div class="category">
+                                    <input type="checkbox" id="8-category" name="ctgr" value="cooking" />
+                                    <label for="8-category">cooking</label>
+                                </div>
+                                <div class="category">
+                                    <input type="checkbox" id="9-category" name="ctgr" value="other" />
+                                    <label for="9-category">other</label>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="filter-btn">
+                            <button type="submit" class="button">Submit</button>
                         </div>
-                        <div class="category">
-                            <input type="checkbox" id="2-category" name="ctgr" value="sport" />
-                            <label for="2-category">sport</label>
-                        </div>
-                        <div class="category">
-                            <input type="checkbox" id="3-category" name="ctgr" value="music" />
-                            <label for="3-category">music</label>
-                        </div>
-                        <div class="category">
-                            <input type="checkbox" id="4-category" name="ctgr" value="kids" />
-                            <label for="4-category">kids</label>
-                        </div>
-                        <div class="category">
-                            <input type="checkbox" id="5-category" name="ctgr" value="hobbies" />
-                            <label for="5-category">hobbies</label>
-                        </div>
-                        <div class="category">
-                            <input type="checkbox" id="6-category" name="ctgr" value="programming" />
-                            <label for="6-category">programming</label>
-                        </div>
-                        <div class="category">
-                            <input type="checkbox" id="7-category" name="ctgr" value="art" />
-                            <label for="7-category">art</label>
-                        </div>
-                        <div class="category">
-                            <input type="checkbox" id="8-category" name="ctgr" value="cooking" />
-                            <label for="8-category">cooking</label>
-                        </div>
-                        <div class="category">
-                            <input type="checkbox" id="9-category" name="ctgr" value="other" />
-                            <label for="9-category">other</label>
-                        </div>
-                    </div>
-                </section>
-                <div class="filter-btn">
-                    <button type="submit" class="button">Submit</button>
+                    </form>
                 </div>
-<<<<<<< HEAD
-            </form>
+            </nav>
         </div>
         <div class="posts">
             {{ if .Posts }}
@@ -83,36 +85,18 @@
                     <p>{{.Title}}</p>
                 </a>
                 <p>{{.Content}}</p>
+                <img class="ornament" src="/image/ornament.png" alt="">
             </div>
             <br>
             {{end}}
             {{end}}
         </div>
-=======
-            </nav>
-
-           
-            
-        </header>
-
-
-        <main class="main">
-         
-        </main>
-
-
-    </div>
-      
->>>>>>> origin/master
         <div class="navigation-wrapper">
             <div class="navigation-sticky">
                 {{if .User.UserName}}
-                <div class="user-data">
-                    <p> Hello {{.User.UserName}}</p>
-                </div>
                 <a class="navitem" href="/user/{{.User.UserName}}">
                     <i class="bi bi-card-text"></i>
-                    My Posts
+                    {{.User.UserName}}'s Posts
                 </a>
                 <a class="navitem" href="/logout">
                     <i class="bi bi-box-arrow-left"></i>
@@ -123,20 +107,17 @@
                     Create Post
                 </a>
                 {{else}}
-                <div class="sign-up">
-                    <a href="/sign-up">Sign-up</a>
-                </div>
-                <div class="sign-in">
-                    <a href="/sign-in">Sign-in</a>
-                </div>
+                <a class="navitem" href="/sign-in">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Sign-in
+                </a>
+                <a class="navitem" href="/sign-up">
+                    <i class="bi bi-door-open"></i>
+                    Sign-up
+                </a>
                 {{end}}
             </div>
         </div>
-<<<<<<< HEAD
-=======
-    
-    
->>>>>>> origin/master
 </body>
 
 </html>

@@ -1,3 +1,7 @@
 packages: 
     internal - handlers, functions and etc
     web - css, html, js (if will be)
+
+
+https://icons.getbootstrap.com/icons/door-open/ <- taking logos
+https://www.canva.com/colors/color-wheel/ <- selecting colors
