@@ -102,21 +102,23 @@ a {
     user-select: none;
 }
 
-.filter-class{
+.filter-class {
     border: 4px solid var(--blue);
-    padding: 20px; 
+    padding: 20px;
     border-radius: 40px;
     width: 130px;
     margin: 20px;
     float: left;
 }
- .filter-tag{
+
+.filter-tag {
     width: 100%;
     text-align: center;
     margin: 0%;
     font-weight: bold;
     font-size: 20px;
- }
+    padding: 0px 0px 10px 0px;
+}
 
 .navitem {
     margin: 5px 40px;
@@ -139,39 +141,9 @@ a {
     background-color: var(--blue-light);
 }
 
-
-.btn:focus {
-    outline: none;
-}
-
- .green {
-    color: green;
-}
-
-.red {
-    color: red;
-}
-
-
-.author{
-    margin-top: 30px;
+.filter-btn-cover {
     display: flex;
-}
-
-.avatar{
-    padding-top: 10px;
-    margin-right: 15px;
-}
-
-.authorname{
-    font-weight: bold;
-    font-size: 24px;
-}
-
-.authoremail{
-    font-size: 12px;
-    color: grey;
-    font-weight: 300;
+    justify-content: center;
 }
 
 .filter-btn {
@@ -186,4 +158,64 @@ a {
 
 .filter-btn:hover {
     background-color: var(--blue-light);
+}
+
+.category input {
+    cursor: pointer;
+}
+
+/* second part */
+.btn:focus {
+    outline: none;
+}
+
+input[type="checkbox"]:checked{
+    color: var(--blue);
+    accent-color: var(--blue);
+    /* background-color: var(--blue); */
+}
+input[type="checkbox"]:checked+label{
+    color: var(--blue);
+    accent-color: var(--blue);
+    /* background-color: var(--blue); */
+}
+/* input[type="checkbox"]{
+    -webkit-appearance: none;
+    appearance: none;  
+    cursor: pointer;
+}
+input[type="checkbox"]::before{
+    cursor: pointer;
+} */
+
+
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+
+.author {
+    margin-top: 30px;
+    display: flex;
+}
+
+.avatar {
+    padding-top: 10px;
+    margin-right: 15px;
+}
+
+.authorname {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.authoremail {
+    font-size: 12px;
+    color: grey;
+    font-weight: 300;
 }
