@@ -75,6 +75,7 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			h.ErrorPage(w, http.StatusNotFound, err)
 			return
 		}
+		author, err := h.services.Auth.GetUserByID(post.AuthorID)
 		comments, err := h.services.GetCommentsByPostID(postID)
 		if err != nil {
 			log.Printf("error getting comments by post ID: %s", err)
@@ -93,6 +94,7 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			Post:     post,
 			Comments: comments,
 			Reaction: reaction,
+			Author:   author,
 		}
 
 		if err := postTemp.Execute(w, data); err != nil || postParse != nil {
