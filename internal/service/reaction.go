@@ -2,6 +2,7 @@ package service
 
 import (
 	"database/sql"
+	"errors"
 
 	"forum/internal/models"
 	"forum/internal/repository"
@@ -9,8 +10,10 @@ import (
 
 type Reaction interface {
 	CreateReaction(reaction models.Reaction) error
-	GetReactionByIDs(PostID, AuthorID int) (models.Reaction, error)
+	GetReactionByPostID(PostID, AuthorID int) (models.Reaction, error)
 	GetReactionCountByPostID(PostID int) (int, int, error)
+	GetReactionCountByCommentID(CommentID int) (int, int, error)
+	GetReactionByCommentID(CommentID, AuthorID int) (string, error)
 }
 type ReactionService struct {
 	repository repository.Reaction
@@ -26,8 +29,23 @@ func (s *ReactionService) GetReactionCountByPostID(PostID int) (int, int, error)
 	return s.repository.GetReactionCountByPostID(PostID)
 }
 
+func (s *ReactionService) GetReactionCountByCommentID(CommentID int) (int, int, error) {
+	return s.repository.GetReactionCountByCommentID(CommentID)
+}
+
 func (s *ReactionService) CreateReaction(reaction models.Reaction) error {
-	exist, err := s.repository.GetReactionByIDs(reaction.PostID, reaction.AuthorID)
+	var exist models.Reaction
+	var err error
+
+	if reaction.CommentID != 0 && reaction.PostID != 0 {
+		return errors.New("bad request")
+	}
+	if reaction.CommentID == 0 {
+		exist, err = s.repository.GetReactionByPostID(reaction.PostID, reaction.AuthorID)
+	} else if reaction.PostID == 0 {
+		exist, err = s.repository.GetReactionByCommentID(reaction.CommentID, reaction.AuthorID)
+	}
+
 	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
@@ -43,6 +61,17 @@ func (s *ReactionService) CreateReaction(reaction models.Reaction) error {
 	}
 }
 
-func (s *ReactionService) GetReactionByIDs(PostID, AuthorID int) (models.Reaction, error) {
-	return s.repository.GetReactionByIDs(PostID, AuthorID)
+func (s *ReactionService) GetReactionByPostID(PostID, AuthorID int) (models.Reaction, error) {
+	return s.repository.GetReactionByPostID(PostID, AuthorID)
+}
+
+func (s *ReactionService) GetReactionByCommentID(CommentID, AuthorID int) (string, error) {
+	reaction, err := s.repository.GetReactionByCommentID(CommentID, AuthorID)
+	if err != nil && err != sql.ErrNoRows {
+		return "", err
+	}
+	if reaction == (models.Reaction{}) {
+		return "none", nil
+	}
+	return reaction.Type, nil
 }

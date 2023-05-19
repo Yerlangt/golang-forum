@@ -17,7 +17,11 @@ var (
 
 func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		if err := createPostTemp.Execute(w, nil); err != nil || createPostParse != nil {
+		user := r.Context().Value(ctxKey).(models.User)
+		data := models.TemplateData{
+			User: user,
+		}
+		if err := createPostTemp.Execute(w, data); err != nil || createPostParse != nil {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
 		}
@@ -82,7 +86,20 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("error getting comments by post ID: %s", err)
 		}
-		reaction, err := h.services.Reaction.GetReactionByIDs(postID, user.ID)
+		for i := range comments {
+			commentType, err := h.services.Reaction.GetReactionByCommentID(comments[i].ID, user.ID)
+			if err != nil {
+				log.Printf("error getting GetReactionByCommentID: %s", err)
+			}
+			likes, dislikes, err := h.services.Reaction.GetReactionCountByCommentID(comments[i].ID)
+			if err != nil {
+				log.Printf("error getting GetReactionCountByCommentID: %s", err)
+			}
+			comments[i].Reaction = commentType
+			comments[i].LikeCount = likes
+			comments[i].DislikeCount = dislikes
+		}
+		postReaction, err := h.services.Reaction.GetReactionByPostID(postID, user.ID)
 		if err != nil {
 			log.Printf("error getting GetReactionByIDs: %s", err)
 		}
@@ -95,11 +112,11 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 		}
 
 		data := models.TemplateData{
-			User:     user,
-			Post:     post,
-			Comments: comments,
-			Reaction: reaction,
-			Author:   author,
+			User:         user,
+			Post:         post,
+			Comments:     comments,
+			PostReaction: postReaction,
+			Author:       author,
 		}
 
 		if err := postTemp.Execute(w, data); err != nil || postParse != nil {

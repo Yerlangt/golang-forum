@@ -28,9 +28,9 @@
                     Home
                 </a>
                 
-            </nav>
+            </nav>  
         </div>
-        <div class="post">
+        <div class="post-cur">
             <div class="author">
                 <div class="avatar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
@@ -59,9 +59,10 @@
 
             <div class="reaction">
                 
-                    <form action="/posts/reaction/{{.Post.ID}}" method="Post">
-                        
-                            {{if eq .Reaction.Type "like"}}
+                    <form action="/posts/reaction/" method="Post">
+                            <input type="hidden" name="id" value="{{.Post.ID}}">
+                            <input type="hidden" name="object" value="post">
+                            {{if eq .PostReaction.Type "like"}}
                             <button type="submit" class="btn green" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg"
                                     aria-hidden="true"></i></button>
                             {{else}}
@@ -70,10 +71,8 @@
                             {{end}}
                            
                                 {{.Post.LikeCount}}
-                          
-                  
-                       
-                            {{if eq .Reaction.Type "dislike"}}
+
+                            {{if eq .PostReaction.Type "dislike"}}
                             <button type="submit" class="btn red dislike" id="red" name="dislike" value="dislike"><i
                                     class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></button>
                             {{else}}
@@ -81,31 +80,73 @@
                                     aria-hidden="true"></i></button>
                             {{end}}
                             {{.Post.DislikeCount}}
-                       
                     </form>
-              
-                
             </div>
 
             <div class="comments">
                 <div class="commentlabel">Comments</div>
+                <div class="new-comment">
+                    <form action="/posts/{{.Post.ID}}" method="Post">
+                        <div class="comment-form">
+                            <div class="form__group field">
+                                <input type="input" class="form__field" placeholder="Comment" name="content" id='name' required />
+                                
+                              </div>
+                            <div class="btn-send">
+                                <button class="btn-send" id="btn">
+                                    <p id="btnText">Send</p>
 
+                                </button>
+                            </div>
+                        </div>
+                        
+                        
+                    </form>
+                </div>
                 {{if .Comments}}
                 {{range .Comments}}
-                <div>
-                    <p>{{.AuthorName}}</p>
-                    <p>{{.Content}}</p>
+                <div class="comment-item">
+                    <div class="item-author">
+                        {{.AuthorName}}
+                    </div>
+                    <div class="item-content">
+                        {{.Content}}
+                    </div>
+                    <div class="reaction">
+                
+                        <form action="/posts/reaction/" method="Post">
+                                <input type="hidden" name="id" value="{{.ID}}">
+                                <input type="hidden" name="object" value="comment">
+                   
+                                {{if eq .Reaction "like"}}
+                                <button type="submit" class="btn green" id="green" name="like" value="like">
+                                    <i class="fa fa-thumbs-up fa-lg"
+                                        aria-hidden="true"></i>
+                                </button>
+                                {{else}}
+                                <button type="submit" class="btn" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg"
+                                        aria-hidden="true"></i></button>
+                                {{end}}
+                            
+                                {{.LikeCount}}
+
+                                {{if eq .Reaction "dislike"}}
+                                <button type="submit" class="btn red dislike" id="red" name="dislike" value="dislike"><i
+                                        class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></button>
+                                {{else}}
+                                <button type="submit" class="btn dislike" id="red" name="dislike" value="dislike"><i class="fa fa-thumbs-down fa-lg"
+                                        aria-hidden="true"></i></button>
+                                {{end}}
+                                {{.DislikeCount}}
+                        </form>
+                 </div>
+                    
+
                 </div>
-                <br>
                 {{end}}
                 {{end}}
-                <form action="/posts/{{.Post.ID}}" method="Post">
-        
-                    <input name="content" type="text" class="form-control"
-                        aria-label="Text input with segmented dropdown button" required>
-                    <input type="submit" value="Submit">
-        
-                </form>
+
+                
             </div>
             
             
