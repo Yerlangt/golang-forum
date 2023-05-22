@@ -2,6 +2,7 @@ package handler
 
 import (
 	"database/sql"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -86,6 +87,13 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 		comments, err := h.services.GetCommentsByPostID(postID)
 		if err != nil {
 			log.Printf("error getting comments by post ID: %s", err)
+		}
+		categories, err := h.services.GetCategoriesByPostId(postID)
+		if err != nil {
+			log.Printf("error getting GetCategories: %s", err)
+		} else {
+			fmt.Println("categories", categories)
+			post.Category = categories
 		}
 		for i := range comments {
 			commentType, err := h.services.Reaction.GetReactionByCommentID(comments[i].ID, user.ID)

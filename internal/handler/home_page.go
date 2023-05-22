@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"reflect"
+	"strings"
 
 	"forum/internal/models"
 )
@@ -48,7 +49,23 @@ func (h *Handler) homePage(w http.ResponseWriter, r *http.Request) {
 		} else {
 			posts[i].CommentCount = commentCount
 		}
+		categories, err := h.services.GetCategoriesByPostId(posts[i].ID)
+		if err != nil {
+			log.Printf("error getting GetCategories: %s", err)
+		} else {
+			posts[i].Category = categories
+		}
+		if len(posts[i].Content) > 200 {
+			shortV := posts[i].Content[:200]
+			words := strings.Split(shortV, " ")
+			words = words[:len(words)-1]
+			shortV = strings.Join(words, " ")
+			posts[i].ShortVersion = shortV + " ..."
+		} else {
+			posts[i].ShortVersion = posts[i].Content
+		}
 	}
+
 	data := models.TemplateData{
 		User:  user,
 		Posts: posts,
