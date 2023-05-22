@@ -9,6 +9,7 @@ import (
 type Commentary interface {
 	CreateComment(comment models.Comment) error
 	GetCommentsByPostID(postID int) ([]models.Comment, error)
+	GetCommentCountByPostID(PostID int) (int, error)
 }
 
 type CommentStorage struct {
@@ -53,6 +54,20 @@ func (s *CommentStorage) GetCommentsByPostID(postID int) ([]models.Comment, erro
 			return comments, err
 		}
 		comments = append(comments, comment)
+	}
+
+	return comments, nil
+}
+
+func (s *CommentStorage) GetCommentCountByPostID(PostID int) (int, error) {
+	query := `
+	SELECT COUNT(ID) FROM COMMENTS WHERE PostID=?;
+	`
+
+	var comments int
+
+	if err := s.db.QueryRow(query, PostID).Scan(&comments); err != nil {
+		return 0, err
 	}
 
 	return comments, nil

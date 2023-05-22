@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"database/sql"
 	"html/template"
 	"log"
 	"net/http"
@@ -109,6 +110,12 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 		} else {
 			post.LikeCount = likes
 			post.DislikeCount = dislikes
+		}
+		commentCount, err := h.services.Commentary.GetCommentCountByPostID(postID)
+		if err != nil && err != sql.ErrNoRows {
+			log.Printf("error getting GetCommentCountByPostID: %s", err)
+		} else {
+			post.CommentCount = commentCount
 		}
 
 		data := models.TemplateData{
