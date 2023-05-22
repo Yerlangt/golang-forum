@@ -211,3 +211,9 @@ input[type="checkbox"]:checked+label{
     accent-color: var(--blue);
     /* background-color: var(--blue); */
 }
+
+.reaction{
+    display: flex;
+    justify-content: end;
+    gap: 5px;
+}
