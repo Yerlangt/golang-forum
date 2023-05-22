@@ -51,17 +51,19 @@
             <div class="authors-posts">
                 {{ if .Posts }}
                 {{range .Posts}}
+                
                 <div class="post">
                     <a href="/posts/{{.ID}}">
                         <p class="Title">{{.Title}}</p></br>
                     </a>
-                    <p>{{.Content}} </p>
+                    <p class = "content">{{.Content}} </p>
                     <a class="link-to-read" href="/posts/{{.ID}}">
                         [read whole post]
                         <!-- <i class="bi bi-book"></i> -->
                     </a></br>
                     <img class="ornament" src="/image/ornament.png" alt="">
                 </div>
+                
                 <br>
                 {{end}}
                 {{end}}

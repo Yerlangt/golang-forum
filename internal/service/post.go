@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"forum/internal/models"
@@ -13,6 +14,7 @@ type Post interface {
 	GetAllPosts() ([]models.Post, error)
 	GetPostById(postID int) (models.Post, error)
 	GetPostsByCategory(category []string) ([]models.Post, error)
+	GetCategoriesByPostId(postID int) ([]string, error)
 }
 
 type PostService struct {
@@ -62,6 +64,23 @@ func (s *PostService) GetPostById(postID int) (models.Post, error) {
 	return post, nil
 }
 
+func (s *PostService) GetCategoriesByPostId(postID int) ([]string, error) {
+	categoriesID, err := s.repository.GetCategoriesByPostID(postID)
+	var Categories []string
+	if err != nil {
+		fmt.Println("service/post/70", err)
+		return Categories, err
+	}
+	for _, id := range categoriesID {
+		category, err := s.repository.GetCategoryByID(id)
+		if err != nil {
+			return Categories, err
+		}
+		Categories = append(Categories, category)
+	}
+	return Categories, nil
+}
+
 func (s *PostService) GetAllPosts() ([]models.Post, error) {
 	return s.repository.GetAllPost()
 }
@@ -80,11 +99,11 @@ func (s *PostService) GetPostsByCategory(category []string) ([]models.Post, erro
 		}
 		posts = append(posts, postTemp...)
 	}
-	posts = removeDublicates(posts)
+	posts = removeDuplicates(posts)
 	return posts, nil
 }
 
-func removeDublicates(posts []models.Post) []models.Post {
+func removeDuplicates(posts []models.Post) []models.Post {
 	uniqueMap := make(map[int]bool)
 	uniquePost := make([]models.Post, 0)
 

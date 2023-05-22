@@ -10,6 +10,9 @@ ctrl+shift +R --> clear cache
 h1 {
     color: rgb(0, 119, 255);
 }
+p {
+    display: inline-block;
+}
 
 html,
 body {
@@ -46,7 +49,29 @@ body {
     min-width: 600px;
 }
 
+.author{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.Title{
+    margin: 0;
+    cursor: pointer;
+    font-size: large;
+    text-shadow: 0 0 25px blue, 0 0 5px var(--blue-light);
+}
+
+.link-to-read{
+    cursor: pointer;
+    color: var(--gray);
+    white-space: nowrap;
+    padding-bottom: 20px; 
+}
+
 .ornament {
+    margin-top: 20px;
     width: calc(100%);
 }
 
@@ -179,34 +204,4 @@ input[type="checkbox"]:checked+label{
     color: var(--blue);
     accent-color: var(--blue);
     /* background-color: var(--blue); */
-}
-
-.green {
-    color: green;
-}
-
-.red {
-    color: red;
-}
-
-
-.author {
-    margin-top: 30px;
-    display: flex;
-}
-
-.avatar {
-    padding-top: 10px;
-    margin-right: 15px;
-}
-
-.authorname {
-    font-weight: bold;
-    font-size: 24px;
-}
-
-.authoremail {
-    font-size: 12px;
-    color: grey;
-    font-weight: 300;
 }
