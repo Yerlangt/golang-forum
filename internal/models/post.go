@@ -8,4 +8,5 @@ type Post struct {
 	Category     []string
 	LikeCount    int
 	DislikeCount int
+	CommentCount int
 }

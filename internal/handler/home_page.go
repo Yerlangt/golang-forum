@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"database/sql"
 	"html/template"
+	"log"
 	"net/http"
 	"reflect"
 
@@ -27,9 +29,25 @@ func (h *Handler) homePage(w http.ResponseWriter, r *http.Request) {
 		posts, err = h.services.GetPostsByCategory(categories)
 	}
 
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		h.ErrorPage(w, http.StatusInternalServerError, err)
 		return
+	}
+
+	for i := range posts {
+		likes, dislikes, err := h.services.Reaction.GetReactionCountByPostID(posts[i].ID)
+		if err != nil {
+			log.Printf("error getting GetReactionCount: %s", err)
+		} else {
+			posts[i].LikeCount = likes
+			posts[i].DislikeCount = dislikes
+		}
+		commentCount, err := h.services.Commentary.GetCommentCountByPostID(posts[i].ID)
+		if err != nil && err != sql.ErrNoRows {
+			log.Printf("error getting GetCommentCountByPostID: %s", err)
+		} else {
+			posts[i].CommentCount = commentCount
+		}
 	}
 	data := models.TemplateData{
 		User:  user,
