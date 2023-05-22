@@ -51,17 +51,50 @@
             <div class="authors-posts">
                 {{ if .Posts }}
                 {{range .Posts}}
+
                 <div class="post">
                     <a href="/posts/{{.ID}}">
-                        <p class="Title">{{.Title}}</p></br>
+                        <p class="Title">{{.Title}}</p> </br>
                     </a>
-                    <p>{{.Content}} </p>
+                    <p class="categories">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-pen" viewBox="0 0 16 16">
+                            <path
+                                d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z" />
+                        </svg>
+                        Categories:
+                        {{range .Category}}
+                        *{{.}}
+                        {{end}}
+                    </p>
+                    <p class="content">{{.ShortVersion}} </p>
                     <a class="link-to-read" href="/posts/{{.ID}}">
                         [read whole post]
                         <!-- <i class="bi bi-book"></i> -->
+                        <script src="https://use.fontawesome.com/fe459689b4.js"></script>
+                        <div class="reaction">
+                            <button type="submit" class="btn" id="green" name="like" value="like"><i
+                                    class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>
+                            {{.LikeCount}}
+                            <button type="submit" class="btn dislike" id="red" name="dislike" value="dislike"><i
+                                    class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></button>
+                            {{.DislikeCount}}
+                            <button type="submit" class="btn dislike" id="red" name="dislike" value="dislike"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-chat-square-dots" viewBox="0 0 16 16">
+                                    <path
+                                        d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                    <path
+                                        d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                                </svg></button>
+                            <div class="comment-count">
+                                {{.CommentCount}}
+                            </div>
+                        </div>
                     </a></br>
                     <img class="ornament" src="/image/ornament.png" alt="">
                 </div>
+
                 <br>
                 {{end}}
                 {{end}}

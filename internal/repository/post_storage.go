@@ -14,7 +14,8 @@ type Post interface {
 	GetPostById(PostID int) (models.Post, error)
 	GetLastID() (int, error)
 	GetPostsByCategoryID(categoryID int) ([]models.Post, error)
-
+	GetCategoriesByPostID(postID int) ([]int, error)
+	GetCategoryByID(ID int) (string, error)
 	GetLikedPostsByUserID(UserID int) ([]models.Post, error)
 }
 
@@ -147,4 +148,37 @@ func (s *PostStorage) GetLikedPostsByUserID(UserID int) ([]models.Post, error) {
 	}
 
 	return posts, nil
+}
+
+func (s *PostStorage) GetCategoriesByPostID(postID int) ([]int, error) {
+	query := `
+		SELECT CategoryID FROM CATEGORYLINK WHERE PostID = ?;
+	`
+	rows, err := s.db.Query(query, postID)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	var Categories []int
+	for rows.Next() {
+		var cID int
+		if err := rows.Scan(&cID); err != nil {
+			return Categories, err
+		}
+		Categories = append(Categories, cID)
+	}
+	return Categories, nil
+}
+
+func (s *PostStorage) GetCategoryByID(ID int) (string, error) {
+	query := `
+		SELECT Category FROM CATEGORIES WHERE ID = ?;
+	`
+	var category string
+
+	if err := s.db.QueryRow(query, ID).Scan(&category); err != nil {
+		return category, err
+	}
+	return category, nil
 }

@@ -9,4 +9,5 @@ type Post struct {
 	LikeCount    int
 	DislikeCount int
 	CommentCount int
+	ShortVersion string
 }
