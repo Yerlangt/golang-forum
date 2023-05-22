@@ -14,6 +14,7 @@ type Post interface {
 	GetPostById(PostID int) (models.Post, error)
 	GetLastID() (int, error)
 	GetPostsByCategoryID(categoryID int) ([]models.Post, error)
+	// GetCategoriesByPostID(postID int) ([]int, error)
 }
 
 type PostStorage struct {
