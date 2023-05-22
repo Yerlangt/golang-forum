@@ -51,8 +51,14 @@ body {
 
 .Title{
     cursor: pointer;
-    font-size: large;
+    font-size: 25px;
     text-shadow: 0 0 25px blue, 0 0 5px var(--blue-light);
+    margin-top: 20px;
+}
+
+.categories{
+    margin: 0;
+    color: var(--gray)
 }
 
 .link-to-read{

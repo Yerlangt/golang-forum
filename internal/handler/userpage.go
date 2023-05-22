@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"database/sql"
 	"html/template"
 	"log"
 	"net/http"
@@ -24,6 +25,36 @@ func (h *Handler) userPage(w http.ResponseWriter, r *http.Request) {
 		posts, err := h.services.UserPage.GetPostsByID(userID)
 		if err != nil {
 			log.Printf("error getting posts by user ID: %s", err)
+		}
+		for i := range posts {
+			likes, dislikes, err := h.services.Reaction.GetReactionCountByPostID(posts[i].ID)
+			if err != nil {
+				log.Printf("error getting GetReactionCount: %s", err)
+			} else {
+				posts[i].LikeCount = likes
+				posts[i].DislikeCount = dislikes
+			}
+			commentCount, err := h.services.Commentary.GetCommentCountByPostID(posts[i].ID)
+			if err != nil && err != sql.ErrNoRows {
+				log.Printf("error getting GetCommentCountByPostID: %s", err)
+			} else {
+				posts[i].CommentCount = commentCount
+			}
+			categories, err := h.services.GetCategoriesByPostId(posts[i].ID)
+			if err != nil {
+				log.Printf("error getting GetCategories: %s", err)
+			} else {
+				posts[i].Category = categories
+			}
+			if len(posts[i].Content) > 200 {
+				shortV := posts[i].Content[:200]
+				words := strings.Split(shortV, " ")
+				words = words[:len(words)-1]
+				shortV = strings.Join(words, " ")
+				posts[i].ShortVersion = shortV + " ..."
+			} else {
+				posts[i].ShortVersion = posts[i].Content
+			}
 		}
 		data := models.TemplateData{
 			User:  user,
