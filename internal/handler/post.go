@@ -2,6 +2,7 @@ package handler
 
 import (
 	"database/sql"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -74,6 +75,7 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodGet {
+
 		post, err := h.services.GetPostById(postID)
 		if err != nil {
 			h.ErrorPage(w, http.StatusNotFound, err)
@@ -131,6 +133,10 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else if r.Method == http.MethodPost {
+		if user == (models.User{}) {
+			http.Redirect(w, r, "/sign-up", http.StatusSeeOther)
+			return
+		}
 		if err := r.ParseForm(); err != nil {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
@@ -153,6 +159,30 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 		}
 		http.Redirect(w, r, r.URL.Path, http.StatusSeeOther)
 
+	} else {
+		h.ErrorPage(w, http.StatusMethodNotAllowed, nil)
+	}
+}
+
+var likedTemp, likedPostParse = template.ParseFiles("web/template/liked_post.html")
+
+func (h *Handler) likedPostPage(w http.ResponseWriter, r *http.Request) {
+	user := r.Context().Value(ctxKey).(models.User)
+
+	if r.Method == http.MethodGet {
+		fmt.Print(user)
+		posts, err := h.services.Post.GetLikedPostsByUserID(user.ID)
+		if err != nil {
+			log.Printf("error getting liked posts by user ID: %s", err)
+		}
+		data := models.TemplateData{
+			User:  user,
+			Posts: posts,
+		}
+		if err := likedTemp.Execute(w, data); err != nil || likedPostParse != nil {
+			h.ErrorPage(w, http.StatusInternalServerError, err)
+			return
+		}
 	} else {
 		h.ErrorPage(w, http.StatusMethodNotAllowed, nil)
 	}
