@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -18,7 +17,11 @@ var (
 
 func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		if err := createPostTemp.Execute(w, nil); err != nil || createPostParse != nil {
+		user := r.Context().Value(ctxKey).(models.User)
+		data := models.TemplateData{
+			User: user,
+		}
+		if err := createPostTemp.Execute(w, data); err != nil || createPostParse != nil {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
 		}
@@ -76,25 +79,44 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		author, err := h.services.Auth.GetUserByID(post.AuthorID)
+		if err != nil {
+			log.Printf("error getting author by ID: %s", err)
+		}
 		comments, err := h.services.GetCommentsByPostID(postID)
 		if err != nil {
 			log.Printf("error getting comments by post ID: %s", err)
 		}
-		reaction, err := h.services.Reaction.GetReactionByIDs(postID, user.ID)
+		for i := range comments {
+			commentType, err := h.services.Reaction.GetReactionByCommentID(comments[i].ID, user.ID)
+			if err != nil {
+				log.Printf("error getting GetReactionByCommentID: %s", err)
+			}
+			likes, dislikes, err := h.services.Reaction.GetReactionCountByCommentID(comments[i].ID)
+			if err != nil {
+				log.Printf("error getting GetReactionCountByCommentID: %s", err)
+			}
+			comments[i].Reaction = commentType
+			comments[i].LikeCount = likes
+			comments[i].DislikeCount = dislikes
+		}
+		postReaction, err := h.services.Reaction.GetReactionByPostID(postID, user.ID)
 		if err != nil {
 			log.Printf("error getting GetReactionByIDs: %s", err)
 		}
-		fmt.Println(reaction)
-		// <!--{{if .Reaction.Type eq like}}
-		// <button type="submit" class="btn green" id="green" name="like" value="like"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>
-		// {else}}-->
-		// }
+		likes, dislikes, err := h.services.Reaction.GetReactionCountByPostID(postID)
+		if err != nil {
+			log.Printf("error getting GetReactionCount: %s", err)
+		} else {
+			post.LikeCount = likes
+			post.DislikeCount = dislikes
+		}
+
 		data := models.TemplateData{
-			User:     user,
-			Post:     post,
-			Comments: comments,
-			Reaction: reaction,
-			Author:   author,
+			User:         user,
+			Post:         post,
+			Comments:     comments,
+			PostReaction: postReaction,
+			Author:       author,
 		}
 
 		if err := postTemp.Execute(w, data); err != nil || postParse != nil {
