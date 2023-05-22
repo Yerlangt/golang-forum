@@ -4,59 +4,176 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Post</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css" />
+    <link rel="icon" href="/image/eagle.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>MyForum</title>
 </head>
-<body>
-    <form action="/posts/create" method="POST">
-        <label for="title">Title</label><br>
-        <input type="text" id="title" name="title"><br>
-
-        <label for="content">Content:</label><br>
-        <input type="text" id="content" name="content"><br>
-
-        <section>
-            <div class="categories">
-                <div class="category">
-                    <input type="checkbox" id="1-category" name="category1" value="news" />
-                    <label for="1-category">news</label>
-                </div>
-                <div class="category">
-                    <input type="checkbox" id="2-category" name="category1" value="sport" />
-                    <label for="2-category">sport</label>
-                </div>
-                <div class="category">
-                    <input type="checkbox" id="3-category" name="category1" value="music" />
-                    <label for="3-category">music</label>
-                </div>
-                <div class="category">
-                    <input type="checkbox" id="4-category" name="category1" value="kids" />
-                    <label for="4-category">kids</label>
-                </div>
-                <div class="category">
-                    <input type="checkbox" id="5-category" name="category1" value="hobbies" />
-                    <label for="5-category">hobbies</label>
-                </div>
-                <div class="category">
-                    <input type="checkbox" id="6-category" name="category1" value="programming" />
-                    <label for="6-category">programming</label>
-                </div>
-                <div class="category">
-                    <input type="checkbox" id="7-category" name="category1" value="art" />
-                    <label for="7-category">art</label>
-                </div>
-                <div class="category">
-                    <input type="checkbox" id="8-category" name="category1" value="cooking" />
-                    <label for="8-category">cooking</label>
-                </div>
-                <div class="category">
-                    <input type="checkbox" id="9-category" name="category1" value="other" />
-                    <label for="9-category">other</label>
-                </div>
-            </div>
-        </section>
-        <div class="btn">
-            <button type="submit" class="button">Submit</button>
+<body><div class="container">
+    <div class="header">
+        <div class="logo">
+            <img class="logoimage" src="/image/eagle.png" alt="">
+            <div class="logoname"><a href="/">Qyran</a></div>
         </div>
-    </form>
+        <nav class="navbar">
+            <a class="navitem" href="/">
+                <i class="bi bi-house"></i>
+                Home
+            </a>
+            
+        </nav>
+    </div>
+    
+
+<div class="formbold-main-wrapper">
+ 
+    <div class="formbold-form-wrapper">
+      <form action="/posts/create" method="POST">
+        <div class="label-form">
+            New Post
+        </div>
+          <div class="formbold-input-flex">
+            <div>
+                <label for="title" class="formbold-form-label"> Title </label>
+                <input
+                type="text"
+                name="title"
+                id="firstname"
+                placeholder=""
+                class="formbold-form-input"
+                />
+            </div>
+          </div>
+  
+          <div>
+            <label for="message" class="formbold-form-label"> Content </label>
+            <textarea
+                rows="6"
+                name="content"
+                id="message"
+                placeholder="Type your post"
+                class="formbold-form-input"
+            ></textarea>
+        </div>
+  
+          <div class="formbold-input-radio-wrapper">
+              <label for="jobtitle" class="formbold-form-label"> Categories </label>
+  
+              <div class="formbold-radio-flex">
+                <div class="formbold-radio-group">
+                  <label class="formbold-radio-label">
+                    <input class="formbold-input-radio" type="checkbox" name="category1" id="jobtitle" value="news">
+                    News
+                    <span class="formbold-radio-checkmark"></span>
+                  </label>
+                </div>
+  
+                <div class="formbold-radio-group">
+                  <label class="formbold-radio-label">
+                    <input class="formbold-input-radio" type="checkbox" name="category1" id="jobtitle" value="sport">
+                    Sport
+                    <span class="formbold-radio-checkmark"></span>
+                  </label>
+                </div>
+  
+                <div class="formbold-radio-group">
+                  <label class="formbold-radio-label">
+                    <input class="formbold-input-radio" type="checkbox" name="category1" id="jobtitle" value="music">
+                    Music
+                    <span class="formbold-radio-checkmark"></span>
+                  </label>
+                </div>
+                <div class="formbold-radio-group">
+                    <label class="formbold-radio-label">
+                      <input class="formbold-input-radio" type="checkbox" name="category1" id="jobtitle" value="kids">
+                      Kids
+                      <span class="formbold-radio-checkmark"></span>
+                    </label>
+                  </div>
+                <div class="formbold-radio-group">
+                  <label class="formbold-radio-label">
+                    <input class="formbold-input-radio" type="checkbox" name="category1" id="jobtitle" value="hobbies">
+                    Hobbies
+                    <span class="formbold-radio-checkmark"></span>
+                  </label>
+                </div>
+
+                <div class="formbold-radio-group">
+                    <label class="formbold-radio-label">
+                      <input class="formbold-input-radio" type="checkbox" name="category1" id="jobtitle" value="programming">
+                      Programming
+                      <span class="formbold-radio-checkmark"></span>
+                    </label>
+                  </div>
+                
+                <div class="formbold-radio-group">
+                  <label class="formbold-radio-label">
+                    <input class="formbold-input-radio" type="checkbox" name="category1" id="jobtitle" value="art">
+                    Art
+                    <span class="formbold-radio-checkmark"></span>
+                  </label>
+                </div>
+
+                <div class="formbold-radio-group">
+                    <label class="formbold-radio-label">
+                      <input class="formbold-input-radio" type="checkbox" name="category1" id="jobtitle" value="cooking">
+                      Cooking
+                      <span class="formbold-radio-checkmark"></span>
+                    </label>
+                  </div>
+                <div class="formbold-radio-group">
+                  <label class="formbold-radio-label">
+                    <input class="formbold-input-radio" type="checkbox" name="category1" id="jobtitle" value="others">
+                    Others
+                    <span class="formbold-radio-checkmark"></span>
+                  </label>
+                </div>
+              </div>
+          </div>
+  
+         
+  
+          <button type="submit" class="formbold-btn">
+              Create post
+          </button>
+      </form>
+    </div>
+  </div>
+
+    <div class="navigation-wrapper">
+        <div class="navigation-sticky">
+            {{if .User.UserName}}
+            <a class="navitem" href="/user/{{.User.UserName}}">
+                <i class="bi bi-card-text"></i>
+                {{.User.UserName}}'s Posts
+            </a>
+            <a class="navitem" href="/logout">
+                <i class="bi bi-box-arrow-left"></i>
+                Log out
+            </a>
+            <a class="navitem" href="/posts/create">
+                <i class="bi bi-pencil-square"></i>
+                Create Post
+            </a>
+            {{else}}
+            <a class="navitem" href="/sign-in">
+                <i class="bi bi-box-arrow-in-right"></i>
+                Sign-in
+            </a>
+            <a class="navitem" href="/sign-up">
+                <i class="bi bi-door-open"></i>
+                Sign-up
+            </a>
+            {{end}}
+        </div>
+    </div>
+    
+   
 </body>
 </html>
+
+
