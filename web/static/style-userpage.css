@@ -165,6 +165,7 @@ a {
     background-color: var(--blue);
     cursor: pointer;
     width: 130px;
+    color: white;
     font-size: large;
 }
 
