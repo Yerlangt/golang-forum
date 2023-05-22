@@ -14,6 +14,7 @@ type Post interface {
 	GetAllPosts() ([]models.Post, error)
 	GetPostById(postID int) (models.Post, error)
 	GetPostsByCategory(category []string) ([]models.Post, error)
+	GetLikedPostsByUserID(UserID int) ([]models.Post, error)
 	GetCategoriesByPostId(postID int) ([]string, error)
 }
 
@@ -83,6 +84,10 @@ func (s *PostService) GetCategoriesByPostId(postID int) ([]string, error) {
 
 func (s *PostService) GetAllPosts() ([]models.Post, error) {
 	return s.repository.GetAllPost()
+}
+
+func (s *PostService) GetLikedPostsByUserID(UserID int) ([]models.Post, error) {
+	return s.repository.GetLikedPostsByUserID(UserID)
 }
 
 // need to fix and delete similar posts

@@ -16,6 +16,7 @@ type Post interface {
 	GetPostsByCategoryID(categoryID int) ([]models.Post, error)
 	GetCategoriesByPostID(postID int) ([]int, error)
 	GetCategoryByID(ID int) (string, error)
+	GetLikedPostsByUserID(UserID int) ([]models.Post, error)
 }
 
 type PostStorage struct {
@@ -115,6 +116,27 @@ func (s *PostStorage) GetAllPost() ([]models.Post, error) {
 	}
 
 	defer rows.Close()
+
+	var posts []models.Post
+	for rows.Next() {
+		var post models.Post
+		if err := rows.Scan(&post.ID, &post.AuthorID, &post.Title, &post.Content); err != nil {
+			return posts, err
+		}
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+}
+
+func (s *PostStorage) GetLikedPostsByUserID(UserID int) ([]models.Post, error) {
+	query := `
+	SELECT POSTS.ID, POSTS.AuthorID, POSTS.Title, POSTS.Content FROM POSTS INNER JOIN REACTIONS ON POSTS.ID = REACTIONS.PostID WHERE REACTIONS.Type='like' AND REACTIONS.AuthorID=?;
+	`
+	rows, err := s.db.Query(query, UserID)
+	if err != nil {
+		return nil, err
+	}
 
 	var posts []models.Post
 	for rows.Next() {
