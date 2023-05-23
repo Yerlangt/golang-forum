@@ -3,7 +3,6 @@ package handler
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -38,19 +37,18 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 		title, err1 := r.Form["title"]
 		content, err2 := r.Form["content"]
 		category, err3 := r.Form["category1"]
-		fmt.Println("category1: ", category)
 
 		// ADD HERE CHECK FOR THE CATEGORIES NAMES!!!!
-
 		if category == nil {
 			category = append(category, "other")
 			err3 = true
 		}
-		if !err1 || !err2 || !err3 {
+		check := h.services.Post.CheckCategory(category)
+		// fmt.Println("CHECK: ", check)
+		if !err1 || !err2 || !err3 || !check {
 			h.ErrorPage(w, http.StatusBadRequest, errors.New("error: status bad request"))
 			return
 		}
-
 		post := models.Post{
 			Title:    title[0],
 			Content:  content[0],
@@ -103,7 +101,6 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("error getting GetCategories: %s", err)
 		} else {
-			fmt.Println("categories", categories)
 			post.Category = categories
 		}
 		for i := range comments {
@@ -192,7 +189,6 @@ func (h *Handler) likedPostPage(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value(ctxKey).(models.User)
 
 	if r.Method == http.MethodGet {
-		fmt.Print(user)
 		posts, err := h.services.Post.GetLikedPostsByUserID(user.ID)
 		if err != nil {
 			log.Printf("error getting liked posts by user ID: %s", err)
