@@ -17,7 +17,7 @@ import (
 type Auth interface {
 	CreateUser(user models.User) error
 	SetSession(username, password string) (models.Session, error)
-	UserByToken(token string) (models.User, error)
+	GetUserByToken(token string) (models.User, error)
 	DeleteSession(token string) error
 	GetUserByID(ID int) (models.User, error)
 }
@@ -31,6 +31,7 @@ var (
 	ErrNoUser        = errors.New("user doesn't exist")
 	ErrWrongPassword = errors.New("incorrect password")
 	ErrUserTaken     = errors.New("user with this data is taken")
+	ErrEqualPass     = errors.New("passwords do not correspond")
 )
 
 func NewAuthService(repository repository.Auth) *AuthService {
@@ -45,7 +46,7 @@ const sessionTime = time.Hour
 // creating user (with data validation), works with repository data
 func (s *AuthService) CreateUser(user models.User) error {
 	// check for uniqness of user's mail (using data from the bd)
-	if _, err := s.repository.GetUser("", user.Email); err != sql.ErrNoRows {
+	if _, err := s.repository.GetUserByUsernameOrEmail("", user.Email); err != sql.ErrNoRows {
 		if err == nil {
 			return ErrUserTaken
 		}
@@ -53,7 +54,7 @@ func (s *AuthService) CreateUser(user models.User) error {
 	}
 
 	// check for uniqness of user's username (using data from the bd)
-	if _, err := s.repository.GetUser(user.UserName, ""); err != sql.ErrNoRows {
+	if _, err := s.repository.GetUserByUsernameOrEmail(user.UserName, ""); err != sql.ErrNoRows {
 		if err == nil {
 			return ErrUserTaken
 		}
@@ -94,7 +95,9 @@ func (s *AuthService) SetSession(username, password string) (models.Session, err
 	if err != nil {
 		return models.Session{}, err
 	}
-	s.repository.DeleteSessionById(user.ID)
+	if err := s.repository.DeleteSessionById(user.ID); err != nil {
+		return models.Session{}, err
+	}
 	token, _ := s.generateToken()
 
 	session := models.Session{
@@ -112,20 +115,23 @@ func (s *AuthService) SetSession(username, password string) (models.Session, err
 
 // delete session by token
 func (s *AuthService) DeleteSession(token string) error {
-	return s.repository.DeleteSession(token)
+	return s.repository.DeleteSessionByToken(token)
 }
 
 // finding user by token in db
-func (s *AuthService) UserByToken(token string) (models.User, error) {
+func (s *AuthService) GetUserByToken(token string) (models.User, error) {
 	session, _ := s.repository.GetSessionByToken(token)
 	user, _ := s.repository.GetUserById(session.UserID)
-
 	return user, nil
+}
+
+func (s *AuthService) GetUserByID(ID int) (models.User, error) {
+	return s.repository.GetUserById(ID)
 }
 
 // checking password with hashed on those in the db
 func (s *AuthService) checkPassword(username, password string) (models.User, error) {
-	user, err := s.repository.GetUser(username, "")
+	user, err := s.repository.GetUserByUsernameOrEmail(username, "")
 	if err != nil {
 		return user, ErrNoUser
 	}
@@ -151,8 +157,4 @@ func (s *AuthService) generateToken() (string, error) {
 func (s *AuthService) generateHashedPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	return string(hash), err
-}
-
-func (s *AuthService) GetUserByID(ID int) (models.User, error) {
-	return s.repository.GetUserById(ID)
 }

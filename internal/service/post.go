@@ -16,6 +16,7 @@ type Post interface {
 	GetLikedPostsByUserID(UserID int) ([]models.Post, error)
 	GetCategoriesByPostId(postID int) ([]string, error)
 	CheckCategory(categories []string) bool
+	GetShortVersionContent(content string) string
 }
 
 type PostService struct {
@@ -71,7 +72,6 @@ func (s *PostService) GetCategoriesByPostId(postID int) ([]string, error) {
 	categoriesID, err := s.repository.GetCategoriesByPostID(postID)
 	var Categories []string
 	if err != nil {
-		// fmt.Println("service/post/70", err)
 		return Categories, err
 	}
 	for _, id := range categoriesID {
@@ -92,7 +92,6 @@ func (s *PostService) GetLikedPostsByUserID(UserID int) ([]models.Post, error) {
 	return s.repository.GetLikedPostsByUserID(UserID)
 }
 
-// need to fix and delete similar posts
 func (s *PostService) GetPostsByCategory(category []string) ([]models.Post, error) {
 	var posts []models.Post
 	for _, elem := range category {
@@ -110,19 +109,6 @@ func (s *PostService) GetPostsByCategory(category []string) ([]models.Post, erro
 	return posts, nil
 }
 
-func removeDuplicates(posts []models.Post) []models.Post {
-	uniqueMap := make(map[int]bool)
-	uniquePost := make([]models.Post, 0)
-
-	for _, post := range posts {
-		if !uniqueMap[post.ID] {
-			uniqueMap[post.ID] = true
-			uniquePost = append(uniquePost, post)
-		}
-	}
-	return uniquePost
-}
-
 func (s *PostService) CheckCategory(categories []string) bool {
 	correctCategories := []string{"news", "sport", "music", "kids", "hobbies", "programming", "art", "cooking", "other"}
 	count := 0
@@ -134,6 +120,30 @@ func (s *PostService) CheckCategory(categories []string) bool {
 			}
 		}
 	}
-	// fmt.Println(count == len(categories), categories)
+
 	return count == len(categories)
+}
+
+func (s *PostService) GetShortVersionContent(content string) string {
+	if len(content) > 200 {
+		shortV := content[:200]
+		words := strings.Split(shortV, " ")
+		words = words[:len(words)-1]
+		shortV = strings.Join(words, " ")
+		content = shortV + " ..."
+	}
+	return content
+}
+
+func removeDuplicates(posts []models.Post) []models.Post {
+	uniqueMap := make(map[int]bool)
+	uniquePost := make([]models.Post, 0)
+
+	for _, post := range posts {
+		if !uniqueMap[post.ID] {
+			uniqueMap[post.ID] = true
+			uniquePost = append(uniquePost, post)
+		}
+	}
+	return uniquePost
 }
