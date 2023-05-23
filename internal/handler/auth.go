@@ -17,7 +17,7 @@ var (
 
 func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		if err := signup.Execute(w, nil); err != nil {
+		if err := signup.Execute(w, nil); err != nil || signupParse != nil {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
 		}
@@ -54,6 +54,7 @@ func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if err := h.services.Auth.CreateUser(user); err != nil {
+			w.WriteHeader(400)
 			data := models.TemplateData{
 				Error: err.Error(),
 			}
@@ -71,7 +72,7 @@ func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) signIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		if err := signin.Execute(w, nil); err != nil {
+		if err := signin.Execute(w, nil); err != nil || signinParse != nil {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
 		}
@@ -92,6 +93,7 @@ func (h *Handler) signIn(w http.ResponseWriter, r *http.Request) {
 		session, err := h.services.Auth.SetSession(username[0], password[0])
 		if err != nil {
 			if errors.Is(err, service.ErrNoUser) || errors.Is(err, service.ErrWrongPassword) {
+				w.WriteHeader(400)
 				data := models.TemplateData{
 					Error: err.Error(),
 				}

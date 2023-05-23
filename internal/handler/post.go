@@ -19,8 +19,9 @@ var (
 )
 
 func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
+	user := r.Context().Value(ctxKey).(models.User)
 	if r.Method == http.MethodGet {
-		user := r.Context().Value(ctxKey).(models.User)
+
 		data := models.TemplateData{
 			User: user,
 		}
@@ -57,8 +58,14 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if err := h.services.Post.CreatePost(post); err != nil {
-			// error out of Validation
-			h.ErrorPage(w, http.StatusInternalServerError, err)
+			data := models.TemplateData{
+				Error: err.Error(),
+				User:  user,
+			}
+			w.WriteHeader(400)
+			if err := createPostTemp.Execute(w, data); err != nil {
+				h.ErrorPage(w, http.StatusInternalServerError, err)
+			}
 			return
 		}
 
@@ -142,6 +149,11 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else if r.Method == http.MethodPost {
+		_, err := h.services.GetPostById(postID)
+		if err != nil {
+			h.ErrorPage(w, http.StatusBadRequest, err)
+			return
+		}
 		if user == (models.User{}) {
 			http.Redirect(w, r, "/sign-up", http.StatusSeeOther)
 			return
