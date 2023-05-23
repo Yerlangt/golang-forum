@@ -201,6 +201,32 @@ func (h *Handler) likedPostPage(w http.ResponseWriter, r *http.Request) {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
 		}
+		for i := range posts {
+			likes, dislikes, err := h.services.Reaction.GetReactionCountByPostID(posts[i].ID)
+			if err != nil && err != sql.ErrNoRows {
+				h.ErrorPage(w, http.StatusInternalServerError, err)
+				return
+			} else {
+				posts[i].LikeCount = likes
+				posts[i].DislikeCount = dislikes
+			}
+			commentCount, err := h.services.Commentary.GetCommentCountByPostID(posts[i].ID)
+			if err != nil && err != sql.ErrNoRows {
+				h.ErrorPage(w, http.StatusInternalServerError, err)
+				return
+			} else {
+				posts[i].CommentCount = commentCount
+			}
+			categories, err := h.services.GetCategoriesByPostId(posts[i].ID)
+			if err != nil && err != sql.ErrNoRows {
+				h.ErrorPage(w, http.StatusInternalServerError, err)
+				return
+			} else {
+				posts[i].Category = categories
+			}
+			posts[i].ShortVersion = h.services.GetShortVersionContent(posts[i].Content)
+
+		}
 		data := models.TemplateData{
 			User:  user,
 			Posts: posts,
