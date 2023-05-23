@@ -25,7 +25,8 @@ func NewCommentService(repository repository.Commentary) *CommentService {
 }
 
 func (s *CommentService) CreateComment(comment models.Comment) error {
-	if strings.TrimSpace(comment.Content) == "" {
+	comment.Content = strings.TrimSpace(comment.Content)
+	if comment.Content == "" {
 		return errors.New("empty comment")
 	}
 	return s.repository.CreateComment(comment)
