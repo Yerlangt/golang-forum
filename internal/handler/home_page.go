@@ -15,7 +15,7 @@ var index, indParse = template.ParseFiles("web/template/index.html")
 
 // home page with path "/"
 func (h *Handler) homePage(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" || indParse != nil {
+	if r.URL.Path != "/" {
 		h.ErrorPage(w, http.StatusNotFound, nil)
 		return
 	}
@@ -38,20 +38,20 @@ func (h *Handler) homePage(w http.ResponseWriter, r *http.Request) {
 	for i := range posts {
 		likes, dislikes, err := h.services.Reaction.GetReactionCountByPostID(posts[i].ID)
 		if err != nil {
-			log.Printf("error getting GetReactionCount: %s", err)
+			log.Printf("Error on getting GetReactionCountByPostID in homepage: %s", err)
 		} else {
 			posts[i].LikeCount = likes
 			posts[i].DislikeCount = dislikes
 		}
 		commentCount, err := h.services.Commentary.GetCommentCountByPostID(posts[i].ID)
 		if err != nil && err != sql.ErrNoRows {
-			log.Printf("error getting GetCommentCountByPostID: %s", err)
+			log.Printf("Error on getting GetCommentCountByPostID in homepage: %s", err)
 		} else {
 			posts[i].CommentCount = commentCount
 		}
 		categories, err := h.services.GetCategoriesByPostId(posts[i].ID)
 		if err != nil {
-			log.Printf("error getting GetCategories: %s", err)
+			log.Printf("Error on getting GetCategoriesByPostId in homepage: %s", err)
 		} else {
 			posts[i].Category = categories
 		}
@@ -70,5 +70,8 @@ func (h *Handler) homePage(w http.ResponseWriter, r *http.Request) {
 		User:  user,
 		Posts: posts,
 	}
-	index.Execute(w, data)
+	if err := index.Execute(w, data); err != nil || indParse != nil {
+		h.ErrorPage(w, http.StatusInternalServerError, err)
+		return
+	}
 }
