@@ -36,11 +36,12 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		title, err1 := r.Form["title"]
-		// title[0] = strings.Trim(title[0], " ")
-		// fmt.Println(title)
 		content, err2 := r.Form["content"]
 		category, err3 := r.Form["category1"]
 		fmt.Println("category1: ", category)
+
+		// ADD HERE CHECK FOR THE CATEGORIES NAMES!!!!
+
 		if category == nil {
 			category = append(category, "other")
 			err3 = true
