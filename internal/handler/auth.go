@@ -40,6 +40,8 @@ func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 			data := models.TemplateData{
 				Error: "Passwords do not correspond",
 			}
+			// w.WriteHeader(400)
+			// // we writing header but not sending to the error page
 			if err := signup.Execute(w, data); err != nil {
 				h.ErrorPage(w, http.StatusInternalServerError, err)
 			}
@@ -60,7 +62,6 @@ func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 				h.ErrorPage(w, http.StatusInternalServerError, err)
 			}
 			return
-
 		}
 
 		http.Redirect(w, r, "/", http.StatusSeeOther)

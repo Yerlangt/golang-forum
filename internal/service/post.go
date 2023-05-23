@@ -115,12 +115,9 @@ func removeDuplicates(posts []models.Post) []models.Post {
 
 	for _, post := range posts {
 		if !uniqueMap[post.ID] {
-
 			uniqueMap[post.ID] = true
-
 			uniquePost = append(uniquePost, post)
 		}
 	}
-
 	return uniquePost
 }
