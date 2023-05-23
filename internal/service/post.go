@@ -34,7 +34,9 @@ var (
 )
 
 func (s *PostService) CreatePost(post models.Post) error {
-	if strings.TrimSpace(post.Content) == "" {
+	post.Content = strings.TrimSpace(post.Content)
+	post.Title = strings.TrimSpace(post.Title)
+	if post.Content == "" || post.Title == "" {
 		return ErrEmptyPost
 	}
 	if err := s.repository.CreatePost(post); err != nil {
