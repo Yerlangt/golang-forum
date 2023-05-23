@@ -15,6 +15,7 @@ type Post interface {
 	GetPostsByCategory(category []string) ([]models.Post, error)
 	GetLikedPostsByUserID(UserID int) ([]models.Post, error)
 	GetCategoriesByPostId(postID int) ([]string, error)
+	CheckCategory(categories []string) bool
 }
 
 type PostService struct {
@@ -120,4 +121,19 @@ func removeDuplicates(posts []models.Post) []models.Post {
 		}
 	}
 	return uniquePost
+}
+
+func (s *PostService) CheckCategory(categories []string) bool {
+	correctCategories := []string{"news", "sport", "music", "kids", "hobbies", "programming", "art", "cooking", "other"}
+	count := 0
+	for _, c := range categories {
+		for _, val := range correctCategories {
+			if c == val {
+				count++
+				break
+			}
+		}
+	}
+	// fmt.Println(count == len(categories), categories)
+	return count == len(categories)
 }
