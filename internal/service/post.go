@@ -125,8 +125,8 @@ func (s *PostService) CheckCategory(categories []string) bool {
 }
 
 func (s *PostService) GetShortVersionContent(content string) string {
-	if len(content) > 200 {
-		shortV := content[:200]
+	if len(content) > 300 {
+		shortV := content[:300]
 		words := strings.Split(shortV, " ")
 		words = words[:len(words)-1]
 		shortV = strings.Join(words, " ")
