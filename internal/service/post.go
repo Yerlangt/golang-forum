@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"forum/internal/models"
@@ -16,6 +15,7 @@ type Post interface {
 	GetPostsByCategory(category []string) ([]models.Post, error)
 	GetLikedPostsByUserID(UserID int) ([]models.Post, error)
 	GetCategoriesByPostId(postID int) ([]string, error)
+	CheckCategory(categories []string) bool
 }
 
 type PostService struct {
@@ -71,7 +71,7 @@ func (s *PostService) GetCategoriesByPostId(postID int) ([]string, error) {
 	categoriesID, err := s.repository.GetCategoriesByPostID(postID)
 	var Categories []string
 	if err != nil {
-		fmt.Println("service/post/70", err)
+		// fmt.Println("service/post/70", err)
 		return Categories, err
 	}
 	for _, id := range categoriesID {
@@ -116,12 +116,24 @@ func removeDuplicates(posts []models.Post) []models.Post {
 
 	for _, post := range posts {
 		if !uniqueMap[post.ID] {
-
 			uniqueMap[post.ID] = true
-
 			uniquePost = append(uniquePost, post)
 		}
 	}
-
 	return uniquePost
+}
+
+func (s *PostService) CheckCategory(categories []string) bool {
+	correctCategories := []string{"news", "sport", "music", "kids", "hobbies", "programming", "art", "cooking", "other"}
+	count := 0
+	for _, c := range categories {
+		for _, val := range correctCategories {
+			if c == val {
+				count++
+				break
+			}
+		}
+	}
+	// fmt.Println(count == len(categories), categories)
+	return count == len(categories)
 }

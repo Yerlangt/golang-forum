@@ -60,7 +60,6 @@ func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 				h.ErrorPage(w, http.StatusInternalServerError, err)
 			}
 			return
-
 		}
 
 		http.Redirect(w, r, "/", http.StatusSeeOther)
