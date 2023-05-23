@@ -2,6 +2,8 @@ package handler
 
 import (
 	"database/sql"
+	"errors"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -40,11 +42,13 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 			category = append(category, "other")
 			err3 = true
 		}
-
 		if !err1 || !err2 || !err3 {
-			h.ErrorPage(w, http.StatusBadRequest, nil)
+			h.ErrorPage(w, http.StatusBadRequest, errors.New("error: status bad request"))
 			return
 		}
+
+		// title[0] = strings.Trim(title[0], " ")
+		// fmt.Println(title)
 
 		post := models.Post{
 			Title:    title[0],
@@ -92,6 +96,7 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("error getting GetCategories: %s", err)
 		} else {
+			fmt.Println("categories", categories)
 			post.Category = categories
 		}
 		for i := range comments {
@@ -175,6 +180,7 @@ func (h *Handler) likedPostPage(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value(ctxKey).(models.User)
 
 	if r.Method == http.MethodGet {
+		fmt.Print(user)
 		posts, err := h.services.Post.GetLikedPostsByUserID(user.ID)
 		if err != nil {
 			log.Printf("error getting liked posts by user ID: %s", err)
@@ -188,6 +194,6 @@ func (h *Handler) likedPostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		h.ErrorPage(w, http.StatusMethodNotAllowed, nil)
+		h.ErrorPage(w, http.StatusMethodNotAllowed, errors.New("error: method not allowed"))
 	}
 }

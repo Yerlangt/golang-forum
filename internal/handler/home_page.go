@@ -2,6 +2,7 @@ package handler
 
 import (
 	"database/sql"
+	"errors"
 	"html/template"
 	"log"
 	"net/http"
@@ -19,6 +20,11 @@ func (h *Handler) homePage(w http.ResponseWriter, r *http.Request) {
 		h.ErrorPage(w, http.StatusNotFound, nil)
 		return
 	}
+	if r.Method != http.MethodGet {
+		h.ErrorPage(w, http.StatusMethodNotAllowed, errors.New("error: method not allowed"))
+		return
+	}
+	// add check for method get!!!!!!
 	user := r.Context().Value(ctxKey).(models.User)
 	categories := memberTest(r, "ctgr")
 
