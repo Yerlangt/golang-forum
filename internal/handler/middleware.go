@@ -20,9 +20,9 @@ func (h *Handler) middleware(next http.Handler) http.Handler {
 		if err == http.ErrNoCookie {
 			user = models.User{}
 		} else if err == nil {
-			user, err = h.services.Auth.UserByToken(cookie.Value)
+			user, err = h.services.Auth.GetUserByToken(cookie.Value)
 			if err != nil {
-				log.Printf("user by token: %s\n", err)
+				log.Printf("Error: %s\n", err)
 			}
 		} else {
 			h.ErrorPage(w, http.StatusInternalServerError, err)

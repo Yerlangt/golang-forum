@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"html/template"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -20,7 +19,6 @@ var (
 func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value(ctxKey).(models.User)
 	if r.Method == http.MethodGet {
-
 		data := models.TemplateData{
 			User: user,
 		}
@@ -29,7 +27,6 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else if r.Method == http.MethodPost {
-		user := r.Context().Value(ctxKey).(models.User)
 		if err := r.ParseForm(); err != nil {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
@@ -91,47 +88,57 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 		}
 		author, err := h.services.Auth.GetUserByID(post.AuthorID)
 		if err != nil {
-			log.Printf("error getting author by ID: %s", err)
-		}
-		comments, err := h.services.GetCommentsByPostID(postID)
-		if err != nil {
-			log.Printf("error getting comments by post ID: %s", err)
+			h.ErrorPage(w, http.StatusInternalServerError, err)
+			return
 		}
 		categories, err := h.services.GetCategoriesByPostId(postID)
-		if err != nil {
-			log.Printf("error getting GetCategories: %s", err)
+		if err != nil && err != sql.ErrNoRows {
+			h.ErrorPage(w, http.StatusInternalServerError, err)
+			return
 		} else {
 			post.Category = categories
 		}
+		comments, err := h.services.GetCommentsByPostID(postID)
+		if err != nil && err != sql.ErrNoRows {
+			h.ErrorPage(w, http.StatusInternalServerError, err)
+			return
+		}
+
+		commentCount, err := h.services.Commentary.GetCommentCountByPostID(postID)
+		if err != nil && err != sql.ErrNoRows {
+			h.ErrorPage(w, http.StatusInternalServerError, err)
+			return
+		} else {
+			post.CommentCount = commentCount
+		}
+
 		for i := range comments {
 			commentType, err := h.services.Reaction.GetReactionByCommentID(comments[i].ID, user.ID)
-			if err != nil {
-				log.Printf("error getting GetReactionByCommentID: %s", err)
+			if err != nil && err != sql.ErrNoRows {
+				h.ErrorPage(w, http.StatusInternalServerError, err)
+				return
 			}
 			likes, dislikes, err := h.services.Reaction.GetReactionCountByCommentID(comments[i].ID)
-			if err != nil {
-				log.Printf("error getting GetReactionCountByCommentID: %s", err)
+			if err != nil && err != sql.ErrNoRows {
+				h.ErrorPage(w, http.StatusInternalServerError, err)
+				return
 			}
 			comments[i].Reaction = commentType
 			comments[i].LikeCount = likes
 			comments[i].DislikeCount = dislikes
 		}
 		postReaction, err := h.services.Reaction.GetReactionByPostID(postID, user.ID)
-		if err != nil {
-			log.Printf("error getting GetReactionByIDs: %s", err)
+		if err != nil && err != sql.ErrNoRows {
+			h.ErrorPage(w, http.StatusInternalServerError, err)
+			return
 		}
 		likes, dislikes, err := h.services.Reaction.GetReactionCountByPostID(postID)
-		if err != nil {
-			log.Printf("error getting GetReactionCount: %s", err)
+		if err != nil && err != sql.ErrNoRows {
+			h.ErrorPage(w, http.StatusInternalServerError, err)
+			return
 		} else {
 			post.LikeCount = likes
 			post.DislikeCount = dislikes
-		}
-		commentCount, err := h.services.Commentary.GetCommentCountByPostID(postID)
-		if err != nil && err != sql.ErrNoRows {
-			log.Printf("error getting GetCommentCountByPostID: %s", err)
-		} else {
-			post.CommentCount = commentCount
 		}
 
 		data := models.TemplateData{
@@ -190,8 +197,9 @@ func (h *Handler) likedPostPage(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodGet {
 		posts, err := h.services.Post.GetLikedPostsByUserID(user.ID)
-		if err != nil {
-			log.Printf("error getting liked posts by user ID: %s", err)
+		if err != nil && err != sql.ErrNoRows {
+			h.ErrorPage(w, http.StatusInternalServerError, err)
+			return
 		}
 		data := models.TemplateData{
 			User:  user,

@@ -2,18 +2,19 @@ package repository
 
 import (
 	"database/sql"
+
 	// models saves structs
 	"forum/internal/models"
 )
 
 type Auth interface {
 	CreateUser(user models.User) error
-	GetUser(username, email string) (models.User, error)
+	GetUserByUsernameOrEmail(username, email string) (models.User, error)
 	CreateSession(session models.Session) error
 	GetSessionByToken(token string) (models.Session, error)
 	GetUserById(id int) (models.User, error)
 	DeleteSessionById(userID int) error
-	DeleteSession(token string) error
+	DeleteSessionByToken(token string) error
 }
 
 type AuthStorage struct {
@@ -40,7 +41,7 @@ func (s *AuthStorage) CreateUser(user models.User) error {
 }
 
 // Returning user information (struct form) from the db Users according to username and email
-func (s *AuthStorage) GetUser(username, email string) (models.User, error) {
+func (s *AuthStorage) GetUserByUsernameOrEmail(username, email string) (models.User, error) {
 	query := `
 		SELECT ID, Username, Email, Password FROM USERS WHERE Username=$1 or Email = $2;
 	`
@@ -68,7 +69,7 @@ func (s *AuthStorage) CreateSession(session models.Session) error {
 }
 
 // Delete session from db table Sessions according to user token
-func (s *AuthStorage) DeleteSession(token string) error {
+func (s *AuthStorage) DeleteSessionByToken(token string) error {
 	query := `
 		DELETE FROM SESSIONS WHERE Token=?;
 	`

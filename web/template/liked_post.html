@@ -1,85 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/static/style-userpage.css" />
-    <link rel="icon" href="/image/eagle.png">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <title>QName: {{.User.UserName}}</title>
-</head>
-
-<body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <img class="logoimage" src="/image/eagle.png" alt="">
-                <div class="logoname"><a href="/">Qyran</a></div>
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="/static/style-userpage.css" />
+      <link rel="icon" href="/image/eagle.png">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+      <title>QName: {{.User.UserName}}</title>
+   </head>
+   <body>
+      <div class="container">
+      <div class="header">
+         <div class="logo">
+            <img class="logoimage" src="/image/eagle.png" alt="">
+            <div class="logoname"><a href="/">Qyran</a></div>
+         </div>
+         <nav class="navbar">
+            <a class="navitem" href="/">
+            <i class="bi bi-house"></i>
+            Home
+            </a>
+         </nav>
+      </div>
+      <div class="posts">
+         <div class="author">
+            <div class="avatar">
+               <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                  class="bi bi-person-circle" viewBox="0 0 16 16">
+                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                  <path fill-rule="evenodd"
+                     d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+               </svg>
             </div>
-            <nav class="navbar">
-                <a class="navitem" href="/">
-                    <i class="bi bi-house"></i>
-                    Home
-                </a>
-            </nav>
+            <div class="authorinfo">
+               <div class="authorname">
+                  {{.User.UserName}}
+               </div>
+               <div class="authoremail">
+                  @{{.User.Email}}
+               </div>
+            </div>
+         </div>
+         <div class="authors-posts">
+            {{ if .Posts }}
+            {{range .Posts}}
+            <div class="post">
+               <a href="/posts/{{.ID}}">
+                  <p class="Title">{{.Title}}</p>
+                  </br>
+               </a>
+               <p>{{.Content}} </p>
+               <a class="link-to-read" href="/posts/{{.ID}}">
+                  [read whole post]
+               </a>
+               </br>
+               <img class="ornament" src="/image/ornament.png" alt="">
+            </div>
+            <br>
+            {{end}}
+            {{end}}
+         </div>
+        
+      </div>
+      <div class="navigation-wrapper">
+        <div class="navigation-sticky">
+           {{if .User.UserName}}
+           <a class="navitem" href="/user/{{.User.UserName}}">
+           <i class="bi bi-card-text"></i>
+           {{.User.UserName}}'s Posts
+           </a>
+           <a class="navitem" href="/posts/create">
+           <i class="bi bi-pencil-square"></i>
+           Create Post
+           </a>
+           <a class="navitem" href="/logout">
+               <i class="bi bi-box-arrow-left"></i>
+               Log out
+               </a>
+           {{else}}
+           <a class="navitem" href="/sign-in">
+           <i class="bi bi-box-arrow-in-right"></i>
+           Sign-in
+           </a>
+           <a class="navitem" href="/sign-up">
+           <i class="bi bi-door-open"></i>
+           Sign-up
+           </a>
+           {{end}}
         </div>
-        <div class="posts">
-            <div class="author">
-                <div class="avatar">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                        class="bi bi-person-circle" viewBox="0 0 16 16">
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                        <path fill-rule="evenodd"
-                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                    </svg>
-                </div>
-                <div class="authorinfo">
-                    <div class="authorname">
-                        {{.User.UserName}}
-                    </div>
-                    <div class="authoremail">
-                        @{{.User.Email}}
-                    </div>
-                </div>
-            </div>
-            <div class="authors-posts">
-                {{ if .Posts }}
-                {{range .Posts}}
-                <div class="post">
-                    <a href="/posts/{{.ID}}">
-                        <p class="Title">{{.Title}}</p></br>
-                    </a>
-                    <p>{{.Content}} </p>
-                    <a class="link-to-read" href="/posts/{{.ID}}">
-                        [read whole post]
-                        <!-- <i class="bi bi-book"></i> -->
-                    </a></br>
-                    <img class="ornament" src="/image/ornament.png" alt="">
-                </div>
-                <br>
-                {{end}}
-                {{end}}
-            </div>
-            <script src="https://use.fontawesome.com/fe459689b4.js"></script>
-        </div>
-        <div class="navigation-wrapper">
-            <div class="navigation-sticky">
-                <a class="navitem" href="/logout">
-                    <i class="bi bi-box-arrow-left"></i>
-                    Log out
-                </a>
-                <a class="navitem" href="/posts/create">
-                    <i class="bi bi-pencil-square"></i>
-                    Create Post
-                </a>
-            </div>
-        </div>
-</body>
-
+     </div>
+     <script src="https://use.fontawesome.com/fe459689b4.js"></script>
+   </body>
 </html>

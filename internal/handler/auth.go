@@ -38,7 +38,7 @@ func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 		}
 		if confirmation[0] != password[0] {
 			data := models.TemplateData{
-				Error: "Passwords do not correspond",
+				Error: service.ErrEqualPass.Error(),
 			}
 			if err := signup.Execute(w, data); err != nil || signupParse != nil {
 				h.ErrorPage(w, http.StatusBadRequest, err)
@@ -97,7 +97,6 @@ func (h *Handler) signIn(w http.ResponseWriter, r *http.Request) {
 				}
 				if err := signin.Execute(w, data); err != nil {
 					h.ErrorPage(w, http.StatusInternalServerError, err)
-					return
 				}
 				return
 			}
