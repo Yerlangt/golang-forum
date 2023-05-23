@@ -34,10 +34,12 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
 		}
-
 		title, err1 := r.Form["title"]
+		// title[0] = strings.Trim(title[0], " ")
+		// fmt.Println(title)
 		content, err2 := r.Form["content"]
 		category, err3 := r.Form["category1"]
+		fmt.Println("category1: ", category)
 		if category == nil {
 			category = append(category, "other")
 			err3 = true
@@ -46,9 +48,6 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 			h.ErrorPage(w, http.StatusBadRequest, errors.New("error: status bad request"))
 			return
 		}
-
-		// title[0] = strings.Trim(title[0], " ")
-		// fmt.Println(title)
 
 		post := models.Post{
 			Title:    title[0],
