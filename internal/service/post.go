@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"forum/internal/models"
@@ -69,7 +68,7 @@ func (s *PostService) GetCategoriesByPostId(postID int) ([]string, error) {
 	categoriesID, err := s.repository.GetCategoriesByPostID(postID)
 	var Categories []string
 	if err != nil {
-		fmt.Println("service/post/70", err)
+		// fmt.Println("service/post/70", err)
 		return Categories, err
 	}
 	for _, id := range categoriesID {

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"database/sql"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -93,7 +92,6 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("error getting GetCategories: %s", err)
 		} else {
-			fmt.Println("categories", categories)
 			post.Category = categories
 		}
 		for i := range comments {
@@ -177,7 +175,6 @@ func (h *Handler) likedPostPage(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value(ctxKey).(models.User)
 
 	if r.Method == http.MethodGet {
-		fmt.Print(user)
 		posts, err := h.services.Post.GetLikedPostsByUserID(user.ID)
 		if err != nil {
 			log.Printf("error getting liked posts by user ID: %s", err)
