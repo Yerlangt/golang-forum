@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -65,6 +66,9 @@ func (h *Handler) createReaction(w http.ResponseWriter, r *http.Request) {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
 			return
 		}
+	} else {
+		h.ErrorPage(w, http.StatusMethodNotAllowed, errors.New("error: method not allowed"))
+		return
 	}
 	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
 }

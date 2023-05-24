@@ -2,6 +2,7 @@ package handler
 
 import (
 	"database/sql"
+	"errors"
 	"html/template"
 	"net/http"
 	"strings"
@@ -61,6 +62,6 @@ func (h *Handler) userPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		h.ErrorPage(w, http.StatusMethodNotAllowed, nil)
+		h.ErrorPage(w, http.StatusMethodNotAllowed, errors.New("error: method not allowed"))
 	}
 }

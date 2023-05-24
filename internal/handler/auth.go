@@ -113,7 +113,7 @@ func (h *Handler) signIn(w http.ResponseWriter, r *http.Request) {
 
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	} else {
-		h.ErrorPage(w, http.StatusMethodNotAllowed, nil)
+		h.ErrorPage(w, http.StatusMethodNotAllowed, errors.New("error: method not allowed"))
 		return
 	}
 }
@@ -138,5 +138,6 @@ func (h *Handler) logOut(w http.ResponseWriter, r *http.Request) {
 		Value:   "",
 		Expires: time.Now(),
 	})
+
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

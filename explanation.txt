@@ -5,3 +5,9 @@ packages:
 
 https://icons.getbootstrap.com/icons/door-open/ <- taking logos
 https://www.canva.com/colors/color-wheel/ <- selecting colors
+
+
+USERS with passwords:
+    Aidana - 12345
+    Yerlan - 12345
+    Pavel - 12345

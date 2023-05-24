@@ -128,9 +128,13 @@ func (s *PostService) GetShortVersionContent(content string) string {
 	if len(content) > 300 {
 		shortV := content[:300]
 		words := strings.Split(shortV, " ")
-		words = words[:len(words)-1]
-		shortV = strings.Join(words, " ")
-		content = shortV + " ..."
+		if len(words) == 1 {
+			content = shortV + " ..."
+		} else {
+			words = words[:len(words)-1]
+			shortV = strings.Join(words, " ")
+			content = shortV + " ..."
+		}
 	}
 	return content
 }

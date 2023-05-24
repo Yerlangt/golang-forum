@@ -160,7 +160,6 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if user == (models.User{}) {
-			w.WriteHeader(http.StatusUnauthorized)
 			http.Redirect(w, r, "/sign-up", http.StatusSeeOther)
 			return
 		}

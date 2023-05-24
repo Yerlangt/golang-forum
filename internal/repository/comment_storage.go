@@ -78,10 +78,9 @@ func (s *CommentStorage) GetCommentByID(CommentID int) (models.Comment, error) {
 	query := `
 	SELECT ID, AuthorID, PostID, Content, AuthorName FROM COMMENTS  WHERE ID=?
 	`
-
 	var comment models.Comment
 
-	if err := s.db.QueryRow(query, CommentID).Scan(&comment); err != nil {
+	if err := s.db.QueryRow(query, CommentID).Scan(&comment.ID, &comment.AuthorID, &comment.PostID, &comment.Content, &comment.AuthorName); err != nil {
 		return models.Comment{}, err
 	}
 

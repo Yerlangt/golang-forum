@@ -63,7 +63,8 @@ func (s *PostStorage) GetIDByCategory(elem string) (int, error) {
 
 func (s *PostStorage) GetPostsByCategoryID(categoryID int) ([]models.Post, error) {
 	query := `
-        SELECT ID, AuthorID, Title, Content FROM POSTS WHERE ID = (SELECT (PostID) FROM CATEGORYLINK WHERE (CategoryID) = ($1));
+		SELECT POSTS.ID, POSTS.AuthorID, POSTS.Title, POSTS.Content FROM POSTS INNER JOIN CATEGORYLINK ON POSTS.ID = CATEGORYLINK.PostID WHERE CATEGORYLINK.CategoryID=?;
+	
     `
 	rows, err := s.db.Query(query, categoryID)
 	if err != nil {
