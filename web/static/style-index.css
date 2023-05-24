@@ -8,7 +8,8 @@ ctrl+shift +R --> clear cache
 }
 
 p {
-    display: inline-block;
+    /* display: inline-block; */
+    overflow-wrap: break-word; 
 }
 
 h1 {
