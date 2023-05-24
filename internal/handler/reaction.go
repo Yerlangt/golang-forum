@@ -23,8 +23,16 @@ func (h *Handler) createReaction(w http.ResponseWriter, r *http.Request) {
 		}
 		var reactionType string
 		if val, ok := r.Form["like"]; ok {
+			if val[0] != "like" {
+				h.ErrorPage(w, http.StatusBadRequest, err)
+				return
+			}
 			reactionType = val[0]
 		} else if val, ok := r.Form["dislike"]; ok {
+			if val[0] != "dislike" {
+				h.ErrorPage(w, http.StatusBadRequest, err)
+				return
+			}
 			reactionType = val[0]
 		} else {
 			h.ErrorPage(w, http.StatusBadRequest, err)
