@@ -43,8 +43,18 @@ func (h *Handler) createReaction(w http.ResponseWriter, r *http.Request) {
 			Type:     reactionType,
 		}
 		if object == "post" {
+			_, err := h.services.GetPostById(entityID)
+			if err != nil {
+				h.ErrorPage(w, http.StatusBadRequest, err)
+				return
+			}
 			reaction.PostID = entityID
 		} else if object == "comment" {
+			_, err := h.services.Commentary.GetCommentByID(entityID)
+			if err != nil {
+				h.ErrorPage(w, http.StatusBadRequest, err)
+				return
+			}
 			reaction.CommentID = entityID
 		} else {
 			h.ErrorPage(w, http.StatusBadRequest, err)

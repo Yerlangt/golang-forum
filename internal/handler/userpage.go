@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"html/template"
 	"net/http"
+	"strings"
 
 	"forum/internal/models"
 )
@@ -14,7 +15,12 @@ func (h *Handler) userPage(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value(ctxKey).(models.User)
 
 	if r.Method == http.MethodGet {
+		userNick := strings.TrimPrefix(r.URL.Path, "/user/")
+		if userNick != user.UserName {
+			h.ErrorPage(w, http.StatusNotFound, nil)
+			return
 
+		}
 		posts, err := h.services.UserPage.GetPostsByID(user.ID)
 		if err != nil && err != sql.ErrNoRows {
 			h.ErrorPage(w, http.StatusInternalServerError, err)
