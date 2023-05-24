@@ -12,6 +12,7 @@ type Commentary interface {
 	CreateComment(comment models.Comment) error
 	GetCommentsByPostID(postID int) ([]models.Comment, error)
 	GetCommentCountByPostID(PostID int) (int, error)
+	GetCommentByID(CommentID int) (models.Comment, error)
 }
 
 type CommentService struct {
@@ -38,4 +39,8 @@ func (s *CommentService) GetCommentsByPostID(postID int) ([]models.Comment, erro
 
 func (s *CommentService) GetCommentCountByPostID(PostID int) (int, error) {
 	return s.repository.GetCommentCountByPostID(PostID)
+}
+
+func (s *CommentService) GetCommentByID(CommentID int) (models.Comment, error) {
+	return s.repository.GetCommentByID(CommentID)
 }
